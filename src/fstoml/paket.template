@@ -1,0 +1,25 @@
+type project
+title
+    fstoml
+owners
+    Jared Hester
+authors 
+    Jared Hester
+projectUrl
+    fsprojects/fstoml/fsprojects/fstoml
+iconUrl
+    https://raw.githubusercontent.com/fsprojects/fstoml/master/docs/files/img/logo.png
+licenseUrl
+    fsprojects/fstoml/fsprojects/fstoml/blob/master/LICENSE.txt
+requireLicenseAcceptance
+    false
+copyright
+    Copyright 2015
+tags
+    F# fsharp toml msbuild project-system
+summary
+    TOML based F# Project System
+description
+    TOML based F# Project System
+
+
