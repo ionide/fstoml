@@ -2,7 +2,15 @@ FRAMEWORK: >= NET45
 NUGET
   remote: https://www.nuget.org/api/v2
     FSharp.Core (4.0.0.1) - redirects: force
-
+    Nett (0.5)
+GIT
+  remote: git@github.com:cloudRoutine/toml-fs.git
+     (253aef5a8f4d79ab415aab96a6d829a2a612be5e)
+      build: build.cmd
+      os: Windows
+     (253aef5a8f4d79ab415aab96a6d829a2a612be5e)
+      build: build.sh
+      os: mono
 GROUP Build
 NUGET
   remote: https://www.nuget.org/api/v2

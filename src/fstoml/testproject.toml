@@ -1,0 +1,53 @@
+﻿
+FsTomlVersion   = '0.0.1' 
+Name            = 'Library1'
+AssemblyName    = 'Library1'
+RootNamespace   = 'Library1'
+Guid            = 'bb0c6f01-5e57-4575-a498-5de850d9fa6c'
+OutputType      = 'Library'
+FSharpCore      = '4.4.0.0'
+
+   
+# Files = [
+#     { None = "paket.references" },
+#     { Compile = "src/file.fs" },
+#     { Compile = "src/file2.fs", Link = "src/uselessLink.fs" },
+#     { Compile = "src/file3.fs", Sig = "src/file3.fsi" },
+#     { None    = "src/script.fsx", Private = true },
+# ]  
+
+# References = [
+#     { Include = "System" },
+#     { Include = "FSharp.Core", CopyLocal = 'Always' },
+#     { Include = "Fable.Core" },
+# ]
+
+#ProjectReferences = [
+#    { Name = 'Deppy', Project = "f3d0b372-3af7-49d9-98ed-5a78e9416098", Private = true },
+#]
+    
+
+DebugSymbols = true
+DebugType = 'full'
+Optimize = false
+NoWarn = [52, 40]
+OtherFlags = [ '--warnon:1182' ]
+
+# configurations
+# [ netcore ]    
+
+#    [ netcore."1.6".Release ]
+#        Constants = [ 'RELEASE', 'FABLE' ]
+#        DebugSymbols = false
+#        DebugType = 'pdb'
+#        Optimize = true
+    
+#    [ netcore."1.6".Release.x86 ]
+#        OutputPath = "bin/Release/x86"
+#
+#    [ netcore."1.6".Release.x64 ]
+#        OutputPath = "bin/Release/x64"
+
+
+
+  

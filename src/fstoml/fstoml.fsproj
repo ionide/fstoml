@@ -7,13 +7,9 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>8a5d713d-7ada-4c22-ab94-6ba8345a644b</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>fstoml</RootNamespace>
-    <AssemblyName>fstoml</AssemblyName>
     <RootNamespace>FsToml</RootNamespace>
     <AssemblyName>FsToml</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFSharpCoreVersion>4.3.0.0</TargetFSharpCoreVersion>
-    <Name>fstoml</Name>
     <TargetFSharpCoreVersion>4.4.0.0</TargetFSharpCoreVersion>
     <Name>FsToml</Name>
     <TargetFrameworkProfile />
@@ -64,11 +60,14 @@
   -->
   <Import Project="..\..\.paket\paket.targets" />
   <ItemGroup>
-    <Compile Include="Library.fs" />
-    <None Include="Script.fsx" />
     <None Include="paket.references" />
-    <None Include="paket.template" />
+    <Compile Include="Prelude.fs" />
+    <Compile Include="XLinq.fs" />
+    <Compile Include="Constants.fs" />
+    <Compile Include="ProjectSystem.fs" />
     <Content Include="App.config" />
+    <None Include="testproject.toml" />
+    <None Include="Script.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core, Version=4.4.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -78,5 +77,21 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="toml-fs">
+      <HintPath>..\..\paket-files\github.com\cloudRoutine\toml-fs\src\toml-fs\bin\Release\toml-fs.dll</HintPath>
+    </Reference>
   </ItemGroup>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
+      <ItemGroup>
+        <Reference Include="Nett">
+          <HintPath>..\..\packages\Nett\lib\Net40\Nett.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
 </Project>

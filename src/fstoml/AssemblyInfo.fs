@@ -1,7 +1,7 @@
 ﻿namespace System
 open System.Reflection
 
-[<assembly: AssemblyTitleAttribute("fstoml")>]
+[<assembly: AssemblyTitleAttribute("FsToml")>]
 [<assembly: AssemblyProductAttribute("fstoml")>]
 [<assembly: AssemblyDescriptionAttribute("TOML based F# Project System")>]
 [<assembly: AssemblyVersionAttribute("1.0")>]
