@@ -1,10 +1,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.25618.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{A6A6AF7D-D6E3-442D-9B1E-58CC91879BE1}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "fstoml", "src\fstoml\fstoml.fsproj", "{8A5D713D-7ADA-4C22-AB94-6BA8345A644B}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FsToml", "src\fstoml\FsToml.fsproj", "{8A5D713D-7ADA-4C22-AB94-6BA8345A644B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{BF60BC93-E09B-4E5F-9D85-95A519479D54}"
 	ProjectSection(SolutionItems) = preProject
@@ -34,7 +34,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{8E6D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{ED8079DD-2B06-4030-9F0F-DC548F98E1C4}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "fstoml.Tests", "tests\fstoml.Tests\fstoml.Tests.fsproj", "{B8B3F011-54F3-43D3-BC94-3ECBE5A3770C}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "fstoml.Tests", "tests\fstoml.Tests\FsToml.Tests.fsproj", "{B8B3F011-54F3-43D3-BC94-3ECBE5A3770C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "drafts", "drafts", "{FFB554D4-D292-4F23-B730-270DB6138053}"
+	ProjectSection(SolutionItems) = preProject
+		drafts\spec-draft-0.0.1.toml = drafts\spec-draft-0.0.1.toml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

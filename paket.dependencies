@@ -1,6 +1,11 @@
 source https://nuget.org/api/v2
-
+framework: >= net45
 nuget FSharp.Core redirects: force
+nuget Nett
+
+git git@github.com:cloudRoutine/toml-fs.git  master build: "build.cmd", OS: Windows
+git git@github.com:cloudRoutine/toml-fs.git  master build: "build.sh", OS: mono
+
 
 group Build
   source https://nuget.org/api/v2
