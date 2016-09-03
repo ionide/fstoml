@@ -4,12 +4,19 @@ NUGET
     FSharp.Core (4.0.0.1) - redirects: force
     Nett (0.5)
 GIT
-  remote: git@github.com:cloudRoutine/toml-fs.git
-     (253aef5a8f4d79ab415aab96a6d829a2a612be5e)
+  remote: https://github.com/cloudRoutine/toml-fs.git
+     (97d609faff50f94995702c83c805e808a47a7892)
       build: build.cmd
       os: Windows
-     (253aef5a8f4d79ab415aab96a6d829a2a612be5e)
+     (97d609faff50f94995702c83c805e808a47a7892)
       build: build.sh
+      os: mono
+  remote: https://github.com/fsprojects/Forge.git
+     (1ce1e54d1520837a629b5ca20e9c529c334acdb3)
+      build: build.cmd BuildProjectSystem
+      os: Windows
+     (1ce1e54d1520837a629b5ca20e9c529c334acdb3)
+      build: build.sh BuildProjectSystem
       os: mono
 GROUP Build
 NUGET

@@ -3,13 +3,16 @@ framework: >= net45
 nuget FSharp.Core redirects: force
 nuget Nett
 
-git git@github.com:cloudRoutine/toml-fs.git  master build: "build.cmd", OS: Windows
-git git@github.com:cloudRoutine/toml-fs.git  master build: "build.sh", OS: mono
+git https://github.com/cloudRoutine/toml-fs.git  master build: "build.cmd", OS: Windows
+git https://github.com/cloudRoutine/toml-fs.git  master build: "build.sh", OS: mono
+
+git https://github.com/fsprojects/Forge.git master build: "build.cmd BuildProjectSystem", OS: Windows
+git https://github.com/fsprojects/Forge.git master build: "build.sh BuildProjectSystem", OS: mono
 
 
 group Build
   source https://nuget.org/api/v2
-  
+
   nuget SourceLink.Fake
   nuget FAKE
   nuget FSharp.Formatting
@@ -18,6 +21,6 @@ group Build
 
 group Test
   source https://nuget.org/api/v2
-  
+
   nuget NUnit
   nuget NUnit.Runners

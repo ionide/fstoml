@@ -147,45 +147,67 @@ type OutputType =
         | InvariantEqual Constants.Winexe  -> Some Winexe
         | InvariantEqual Constants.Library -> Some Library
         | InvariantEqual Constants.Module  -> Some Module
-        | _                 -> None
+        | _                                -> None
 
-type SemVer = SemVer of Major:int * Minor:int * Patch:int 
-type FSharpVer = FSharpVer of Framework:int * Major:int * Minor:int * Patch:int 
+type SemVer    = SemVer of Major:int * Minor:int * Patch:int
+type FSharpVer = FSharpVer of Framework:int * Major:int * Minor:int * Patch:int
 
 //   Framework Versions :
-type Net  = V_4_5 | V4_5_1 | V4_6 | V4_6_1 | V4_6_2 
+type Net         = V_4_5 | V4_5_1 | V4_6 | V4_6_1 | V4_6_2
 type NetcoreApp  = V1_0
-type NetStandard =  V1_0 | V1_1 | V1_2 | V1_3 | V1_4 | V1_5 | V1_6
+type NetStandard = V1_0 | V1_1 | V1_2 | V1_3 | V1_4 | V1_5 | V1_6
 
 // Framework Id
 type  FrameworkTarget = Net of Net | NetStandard of NetStandard | NetcoreApp of NetcoreApp
 
 type Configuration = {
-    FrameworkTarget : FrameworkTarget
-    Tailcalls : bool
-    WarningsAsErrors : bool
-    Constants : string []
-    DebugType : DebugType
-    DebugSymbols : bool
-    Optimize : bool
-    Prefer32bit : bool
-    WarningLevel : int
-    OutputPath : string
+    FrameworkTarget   : FrameworkTarget
+    Tailcalls         : bool
+    WarningsAsErrors  : bool
+    Constants         : string []
+    DebugType         : DebugType
+    DebugSymbols      : bool
+    Optimize          : bool
+    Prefer32bit       : bool
+    WarningLevel      : int
+    OutputPath        : string
     DocumentationFile : string
-    NoWarn : int []
-    OtherFlags : string []
+    NoWarn            : int []
+    OtherFlags        : string []
 }
 
+type SourceFile = {
+    Include     : string
+    OnBuild     : BuildAction
+    Link        : string option
+    Copy        : CopyToOutputDirectory option
+}
 
+type Reference = {
+    Include         : string
+    HintPath        : string option
+    Name            : string option
+    SpecificVersion : bool option
+    CopyLocal       : bool option
+}
 
+type ProjectReference = {
+    Include   : string
+    Name      : string option
+    Guid      : Guid option
+    CopyLocal : bool option
+}
 
 type FsTomlProject = {
-    FsTomlVersion : SemVer
-    Name : string
-    AssemblyName : string
-    RootNamespace : string
-    Guid : Guid
-    OutputType : OutputType
-    FSharpCore : FSharpVer
-    Configurations: Configuration []
+    FsTomlVersion     : SemVer
+    Name              : string
+    AssemblyName      : string
+    RootNamespace     : string
+    Guid              : Guid
+    OutputType        : OutputType
+    FSharpCore        : FSharpVer
+    Configurations    : Configuration []
+    Files             : SourceFile []
+    References        : Reference []
+    ProjectReferences : ProjectReference []
 }
