@@ -38,9 +38,6 @@
     <Reference Include="System.Numerics" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="toml-fs">
-      <HintPath>..\..\paket-files\github.com\cloudRoutine\toml-fs\src\toml-fs\bin\Release\toml-fs.dll</HintPath>
-    </Reference>
     <Reference Include="Forge.ProjectSystem">
       <HintPath>..\..\paket-files\github.com\fsprojects\Forge\temp\bin_projectSystem\Forge.ProjectSystem.dll</HintPath>
     </Reference>
@@ -53,6 +50,7 @@
     <Compile Include="ProjectSystem.fs" />
     <Compile Include="Conditions.fs" />
     <Compile Include="Transform.fs" />
+    <Compile Include="Parser.fs" />
     <Content Include="App.config" />
     <None Include="testproject.toml" />
     <None Include="Script.fsx" />
