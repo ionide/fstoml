@@ -13,6 +13,13 @@ let emptyProperty name =
         Data      = None
     }
 
+let optProperty name data =
+    {
+        Name      = name
+        Condition = None
+        Data      = data
+    }
+
 let transformOutputType (input : FsToml.ProjectSystem.OutputType) =
     match input with
     | Exe     -> Forge.ProjectSystem.Exe
@@ -42,17 +49,17 @@ let transformCopyToOutputDirectory (input : CopyToOutputDirectory) =
 
 let transformBuildConfig(c : Configuration) : ConfigSettings =
     {
-        Condition            = Conditions.getCondition c.FrameworkTarget c.FrameworkVersion c.PlatformType
-        DebugSymbols         = property Constants.DebugSymbols c.DebugSymbols
-        DebugType            = property Constants.DebugType (transformDebugType c.DebugType)
-        Optimize             = property Constants.Optimize c.Optimize
-        Tailcalls            = property Constants.Tailcalls c.Tailcalls
-        OutputPath           = property Constants.OutputPath c.OutputPath
-        CompilationConstants = property Constants.CompilationConstants (c.Constants |> String.concat ";")
-        WarningLevel         = property Constants.WarningLevel (c.WarningLevel |> WarningLevel)
-        PlatformTarget       = property Constants.PlatformTarget Forge.ProjectSystem.PlatformType.AnyCPU //TODO: Always AnyCPU ??
-        Prefer32Bit          = property Constants.Prefer32Bit c.Prefer32bit
-        OtherFlags           = property Constants.OtherFlags (c.OtherFlags |> List.ofArray)
+        Condition            = Conditions.getCondition c.Condition
+        DebugSymbols         = optProperty Constants.DebugSymbols c.DebugSymbols
+        DebugType            = optProperty Constants.DebugType (c.DebugType |> Option.map transformDebugType)
+        Optimize             = optProperty Constants.Optimize c.Optimize
+        Tailcalls            = optProperty Constants.Tailcalls c.Tailcalls
+        OutputPath           = optProperty Constants.OutputPath c.OutputPath
+        CompilationConstants = optProperty Constants.CompilationConstants (c.Constants |>Option.map (String.concat ";"))
+        WarningLevel         = optProperty Constants.WarningLevel (c.WarningLevel |> Option.map WarningLevel)
+        PlatformTarget       = optProperty Constants.PlatformTarget None
+        Prefer32Bit          = optProperty Constants.Prefer32Bit c.Prefer32bit
+        OtherFlags           = optProperty Constants.OtherFlags (c.OtherFlags |> Option.map List.ofArray)
     }
 
 let transformSettings (tomlProj : FsTomlProject ) : ProjectSettings =

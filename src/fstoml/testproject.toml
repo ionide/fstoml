@@ -35,18 +35,18 @@ OtherFlags = [ '--warnon:1182' ]
 
 # configurations
 [ netcore ]
+   DebugSymbols = false
 
-   [ netcore."1.6".Release ]
-       Constants = [ 'RELEASE', 'FABLE' ]
-       DebugSymbols = false
-       DebugType = 'pdb'
-       Optimize = true
+[ netcore.Release ]
+    Constants = [ 'RELEASE', 'FABLE' ]
+    DebugType = 'pdb'
+    Optimize = true
 
-   [ netcore."1.6".Release.x86 ]
-       OutputPath = "bin/Release/x86"
+[ netcore."1.6".Release.x86 ]
+    OutputPath = "bin/Release/x86"
 
-   [ netcore."1.6".Release.x64 ]
-       OutputPath = "bin/Release/x64"
+[ netcore."1.6".Release.x64 ]
+    OutputPath = "bin/Release/x64"
 
 
 

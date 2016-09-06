@@ -31,26 +31,50 @@ type ProjectReferences () =
 type TomlProject () =
     member val FsTomlVersion     : string               = "" with get, set
     member val Name              : string               = "" with get, set
+    member val Guid              : Guid                 = Guid.Empty with get, set
     member val AssemblyName      : string               = "" with get, set
     member val RootNamespace     : string               = "" with get, set
-    member val Guid              : Guid                 = Guid.Empty with get, set
     member val OutputType        : string               = "" with get, set
     member val FSharpCore        : string               = "" with get, set
-    member val DebugSymbols      : bool                 = false with get, set
     member val DebugType         : string               = "" with get, set
-    member val Optimize          : bool                 = false with get, set
-    member val Tailcalls         : bool                 = false with get,set
-    member val WarningsAsErrors  : bool                 = false with get,set
-    member val Prefer32bit       : bool                 = false with get,set
-    member val WarningLevel      : int                  = 3 with get,set
     member val OutputPath        : string               = "" with get,set
     member val DocumentationFile : string               = "" with get,set
+    member val DebugSymbols      : Nullable<bool>       = Nullable() with get, set
+    member val Optimize          : Nullable<bool>       = Nullable() with get, set
+    member val Tailcalls         : Nullable<bool>       = Nullable() with get,set
+    member val WarningsAsErrors  : Nullable<bool>       = Nullable() with get,set
+    member val Prefer32bit       : Nullable<bool>       = Nullable() with get,set
+    member val WarningLevel      : Nullable<int>        = Nullable() with get,set
     member val Constants         : string []            = [||] with get,set
     member val NoWarn            : int []               = [||] with get, set
     member val OtherFlags        : string []            = [||] with get, set
     member val Files             : File []              = [||] with get,set
     member val References        : References []        = [||] with get,set
     member val ProjectReferences : ProjectReferences [] = [||] with get,set
+
+let getConfig (proj : TomlProject)=
+    let cond = {
+        FrameworkTarget   = None
+        FrameworkVersion  = None
+        PlatformType      = None
+        BuildType         = None
+    }
+
+    {
+        Condition         = cond
+        Tailcalls         = proj.Tailcalls |> Option.ofNullable
+        WarningsAsErrors  = proj.WarningsAsErrors |> Option.ofNullable
+        Constants         = if proj.Constants |> Array.isEmpty then None else Some proj.Constants
+        DebugType         = proj.DebugType |> DebugType.TryParse
+        DebugSymbols      = proj.DebugSymbols |> Option.ofNullable
+        Optimize          = proj.Optimize |> Option.ofNullable
+        Prefer32bit       = proj.Prefer32bit |> Option.ofNullable
+        WarningLevel      = proj.WarningLevel |> Option.ofNullable
+        OutputPath        = if proj.OutputPath = "" then None else Some proj.OutputPath
+        DocumentationFile = if proj.DocumentationFile = "" then None else Some proj.OutputPath
+        NoWarn            = if proj.NoWarn |> Array.isEmpty then None else Some proj.NoWarn
+        OtherFlags        = if proj.OtherFlags |> Array.isEmpty then None else Some proj.OtherFlags
+    }
 
 let toProjectSystem (proj : TomlProject) : FsTomlProject =
     let version =
@@ -61,24 +85,8 @@ let toProjectSystem (proj : TomlProject) : FsTomlProject =
         let t = proj.FSharpCore.Split('.')
         FSharpVer (int t.[0], int t.[1], int t.[2], int t.[3])
 
-    let config =
-        {
-            FrameworkTarget   = None
-            FrameworkVersion  = None
-            PlatformType      = None
-            Tailcalls         = proj.Tailcalls
-            WarningsAsErrors  = proj.WarningsAsErrors
-            Constants         = proj.Constants
-            DebugType         = proj.DebugType |> DebugType.Parse
-            DebugSymbols      = proj.DebugSymbols
-            Optimize          = proj.Optimize
-            Prefer32bit       = proj.Prefer32bit
-            WarningLevel      = proj.WarningLevel
-            OutputPath        = proj.OutputPath
-            DocumentationFile = proj.DocumentationFile
-            NoWarn            = proj.NoWarn
-            OtherFlags        = proj.OtherFlags
-        }
+    let config = getConfig proj
+
 
     let projRefs =
         proj.ProjectReferences
@@ -137,6 +145,28 @@ let toProjectSystem (proj : TomlProject) : FsTomlProject =
         Files = files
     }
 
+let rec getTables (table : TomlTable) (name : string) =
+    let names =
+        table.Rows
+        |> Seq.filter (fun kv -> kv.Value.ReadableTypeName = "table" )
+        |> Seq.map (fun kv -> kv.Key, if name ="" then kv.Key else name + "." + kv.Key )
+        |> Seq.toList
+
+    let res =
+        names
+        |> Seq.map (fun (m,n) -> getTables (table.Get<TomlTable>(m)) n  )
+        |> Seq.toList
+        |> List.collect id
+
+    let configs =
+        names |> List.map (fun (m,n) -> n, table.Get<TomlProject>(m) |> getConfig)
+
+    configs @ res
+
 let parse (path : string) =
-     Toml.ReadFile<_> path
-     |> toProjectSystem
+     let main = Toml.ReadFile<_> path
+     let asTable = Toml.ReadFile<TomlTable> path
+     let emptyConfig = TomlProject() |> getConfig
+     let configs = getTables asTable "" |> List.map (snd) |> List.filter ((<>) emptyConfig) |> List.toArray
+     let res = main |> toProjectSystem
+     {res with Configurations = Array.append res.Configurations configs}

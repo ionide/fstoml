@@ -29,13 +29,20 @@ f
 //     <DebugSymbols>true</DebugSymbols>
 //     <DebugType>Full</DebugType>
 //     <Optimize>false</Optimize>
-//     <Tailcalls>false</Tailcalls>
-//     <OutputPath></OutputPath>
-//     <DefineConstants></DefineConstants>
-//     <WarningLevel>3</WarningLevel>
-//     <PlatformTarget>AnyCPU</PlatformTarget>
-//     <Prefer32Bit>false</Prefer32Bit>
 //     <OtherFlags>--warnon:1182</OtherFlags>
+//   </PropertyGroup>
+//   <PropertyGroup Condition="">
+//     <DebugSymbols>false</DebugSymbols>
+//   </PropertyGroup>
+//   <PropertyGroup Condition="">
+//     <Optimize>true</Optimize>
+//     <DefineConstants>RELEASE;FABLE</DefineConstants>
+//   </PropertyGroup>
+//   <PropertyGroup Condition="">
+//     <OutputPath>bin/Release/x86</OutputPath>
+//   </PropertyGroup>
+//   <PropertyGroup Condition="">
+//     <OutputPath>bin/Release/x64</OutputPath>
 //   </PropertyGroup>
 //   <ItemGroup>
 //     <Reference Include="System" />

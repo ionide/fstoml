@@ -29,6 +29,10 @@ let [<Literal>] PreserveNewest    = "PreserveNewest"
 let [<Literal>] PdbOnly   = "PdbOnly"
 let [<Literal>] Full      = "Full"
 
+// BuildType Constants
+let [<Literal>] Debug   = "Debug"
+let [<Literal>] Release = "Release"
+
 
 // OutputType Constants
 let [<Literal>] Exe       = "Exe"

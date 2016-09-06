@@ -149,6 +149,27 @@ type OutputType =
         | InvariantEqual Constants.Module  -> Some Module
         | _                                -> None
 
+[<RequireQualifiedAccess>]
+type BuildType =
+    | Debug
+    | Release
+
+
+    override self.ToString () = self |> function
+        | Debug     -> Constants.Debug
+        | Release  -> Constants.Release
+
+    static member Parse text = text |> function
+        | InvariantEqual Constants.Debug   -> Debug
+        | InvariantEqual Constants.Release -> Release
+        | _ ->
+            failwithf "Could not parse '%s' into a `OutputType`" text
+
+    static member TryParse text = text |> function
+        | InvariantEqual Constants.Debug   -> Some Debug
+        | InvariantEqual Constants.Release -> Some Release
+        | _                                -> None
+
 type SemVer    = SemVer of Major:int * Minor:int * Patch:int
 type FSharpVer = FSharpVer of Framework:int * Major:int * Minor:int * Patch:int
 
@@ -193,22 +214,27 @@ type FrameworkTarget =
         | NetStandard -> ".NETStandard"
         | NetcoreApp  -> ".NETCoreApp"
 
-type Configuration = {
+type Condition = {
     FrameworkTarget   : FrameworkTarget option
     FrameworkVersion  : FrameworkVersion option
     PlatformType      : PlatformType option
-    Tailcalls         : bool
-    WarningsAsErrors  : bool
-    Constants         : string []
-    DebugType         : DebugType
-    DebugSymbols      : bool
-    Optimize          : bool
-    Prefer32bit       : bool
-    WarningLevel      : int
-    OutputPath        : string
-    DocumentationFile : string
-    NoWarn            : int []
-    OtherFlags        : string []
+    BuildType         : BuildType option
+}
+
+type Configuration = {
+    Condition         : Condition
+    Tailcalls         : bool option
+    WarningsAsErrors  : bool option
+    Constants         : string [] option
+    DebugType         : DebugType option
+    DebugSymbols      : bool option
+    Optimize          : bool option
+    Prefer32bit       : bool option
+    WarningLevel      : int option
+    OutputPath        : string option
+    DocumentationFile : string option
+    NoWarn            : int [] option
+    OtherFlags        : string [] option
 }
 
 type SourceFile = {
