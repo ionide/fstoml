@@ -153,15 +153,50 @@ type SemVer    = SemVer of Major:int * Minor:int * Patch:int
 type FSharpVer = FSharpVer of Framework:int * Major:int * Minor:int * Patch:int
 
 //   Framework Versions :
-type Net         = V_4_5 | V4_5_1 | V4_6 | V4_6_1 | V4_6_2
-type NetcoreApp  = V1_0
-type NetStandard = V1_0 | V1_1 | V1_2 | V1_3 | V1_4 | V1_5 | V1_6
+type FrameworkVersion =
+    | V1_0
+    | V1_1
+    | V1_2
+    | V1_3
+    | V1_4
+    | V1_5
+    | V1_6
+    | V_4_5
+    | V4_5_1
+    | V4_6
+    | V4_6_1
+    | V4_6_2
+
+    override self.ToString () = self |> function
+        | V1_0   -> "v1.0"
+        | V1_1   -> "v1.1"
+        | V1_2   -> "v1.2"
+        | V1_3   -> "v1.3"
+        | V1_4   -> "v1.4"
+        | V1_5   -> "v1.5"
+        | V1_6   -> "v1.6"
+        | V_4_5  -> "v4.5"
+        | V4_5_1 -> "v4.5.1"
+        | V4_6   -> "v4.6"
+        | V4_6_1 -> "v4.6.1"
+        | V4_6_2 -> "v4.6.2"
+
 
 // Framework Id
-type  FrameworkTarget = Net of Net | NetStandard of NetStandard | NetcoreApp of NetcoreApp
+type FrameworkTarget =
+    | Net
+    | NetStandard
+    | NetcoreApp
+
+    override self.ToString () = self |> function
+        | Net         -> ".NETFramework"
+        | NetStandard -> ".NETStandard"
+        | NetcoreApp  -> ".NETCoreApp"
 
 type Configuration = {
-    FrameworkTarget   : FrameworkTarget
+    FrameworkTarget   : FrameworkTarget option
+    FrameworkVersion  : FrameworkVersion option
+    PlatformType      : PlatformType option
     Tailcalls         : bool
     WarningsAsErrors  : bool
     Constants         : string []

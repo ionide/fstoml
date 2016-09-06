@@ -42,7 +42,7 @@ let transformCopyToOutputDirectory (input : CopyToOutputDirectory) =
 
 let transformBuildConfig(c : Configuration) : ConfigSettings =
     {
-        Condition            = ""
+        Condition            = Conditions.getCondition c.FrameworkTarget c.FrameworkVersion c.PlatformType
         DebugSymbols         = property Constants.DebugSymbols c.DebugSymbols
         DebugType            = property Constants.DebugType (transformDebugType c.DebugType)
         Optimize             = property Constants.Optimize c.Optimize

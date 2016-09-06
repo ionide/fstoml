@@ -51,10 +51,11 @@
     <Compile Include="XLinq.fs" />
     <Compile Include="Constants.fs" />
     <Compile Include="ProjectSystem.fs" />
+    <Compile Include="Conditions.fs" />
+    <Compile Include="Transform.fs" />
     <Content Include="App.config" />
     <None Include="testproject.toml" />
     <None Include="Script.fsx" />
-    <Compile Include="Transform.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Choose>
