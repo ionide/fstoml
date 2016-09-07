@@ -3,6 +3,7 @@ module FsToml.Parser
 open Nett
 open System
 open ProjectSystem
+open Conditions
 
 type File () =
     member val Compile          : string         = null with get,set
@@ -52,14 +53,8 @@ type TomlProject () =
     member val References        : References []        = [||] with get,set
     member val ProjectReferences : ProjectReferences [] = [||] with get,set
 
-let getConfig (proj : TomlProject)=
-    let cond = {
-        FrameworkTarget   = None
-        FrameworkVersion  = None
-        PlatformType      = None
-        BuildType         = None
-    }
-
+let getConfig condition (proj : TomlProject) =
+    let cond =  Conditions.parseTomlCondition condition
     {
         Condition         = cond
         Tailcalls         = proj.Tailcalls |> Option.ofNullable
@@ -85,7 +80,7 @@ let toProjectSystem (proj : TomlProject) : FsTomlProject =
         let t = proj.FSharpCore.Split('.')
         FSharpVer (int t.[0], int t.[1], int t.[2], int t.[3])
 
-    let config = getConfig proj
+    let config = getConfig "" proj
 
 
     let projRefs =
@@ -159,14 +154,14 @@ let rec getTables (table : TomlTable) (name : string) =
         |> List.collect id
 
     let configs =
-        names |> List.map (fun (m,n) -> n, table.Get<TomlProject>(m) |> getConfig)
+        names |> List.map (fun (m,n) -> table.Get<TomlProject>(m) |> getConfig n)
 
     configs @ res
 
 let parse (path : string) =
      let main = Toml.ReadFile<_> path
      let asTable = Toml.ReadFile<TomlTable> path
-     let emptyConfig = TomlProject() |> getConfig
-     let configs = getTables asTable "" |> List.map (snd) |> List.filter ((<>) emptyConfig) |> List.toArray
+     let emptyConfig = TomlProject() |> getConfig ""
+     let configs = getTables asTable "" |>  List.filter (fun n -> n <> { emptyConfig with Condition = n.Condition}) |> List.toArray
      let res = main |> toProjectSystem
      {res with Configurations = Array.append res.Configurations configs}

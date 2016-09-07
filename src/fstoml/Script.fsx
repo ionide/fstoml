@@ -31,17 +31,18 @@ f
 //     <Optimize>false</Optimize>
 //     <OtherFlags>--warnon:1182</OtherFlags>
 //   </PropertyGroup>
-//   <PropertyGroup Condition="">
+//   <PropertyGroup Condition="('$(TargetFrameworkIdentifier)' == '.NETCoreApp')">
 //     <DebugSymbols>false</DebugSymbols>
 //   </PropertyGroup>
-//   <PropertyGroup Condition="">
+//   <PropertyGroup Condition="('$(TargetFrameworkIdentifier)' == '.NETCoreApp') AND ('$(Configuration)' =='Release')">
+//     <DebugType>PdbOnly</DebugType>
 //     <Optimize>true</Optimize>
 //     <DefineConstants>RELEASE;FABLE</DefineConstants>
 //   </PropertyGroup>
-//   <PropertyGroup Condition="">
+//   <PropertyGroup Condition="('$(TargetFrameworkIdentifier)' == '.NETCoreApp') AND ('$(Platform)' == 'x86') AND ('$(Configuration)' =='Release')">
 //     <OutputPath>bin/Release/x86</OutputPath>
 //   </PropertyGroup>
-//   <PropertyGroup Condition="">
+//   <PropertyGroup Condition="('$(TargetFrameworkIdentifier)' == '.NETCoreApp') AND ('$(Platform)' == 'x64') AND ('$(Configuration)' =='Release')">
 //     <OutputPath>bin/Release/x64</OutputPath>
 //   </PropertyGroup>
 //   <ItemGroup>

@@ -39,7 +39,7 @@ OtherFlags = [ '--warnon:1182' ]
 
 [ netcore.Release ]
     Constants = [ 'RELEASE', 'FABLE' ]
-    DebugType = 'pdb'
+    DebugType = 'pdbonly'
     Optimize = true
 
 [ netcore."1.6".Release.x86 ]

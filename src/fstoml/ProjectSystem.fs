@@ -2,9 +2,6 @@
 
 open System
 
-
-
-
 type PlatformType =
     | X86 |  X64 | AnyCPU
 
@@ -170,8 +167,18 @@ type BuildType =
         | InvariantEqual Constants.Release -> Some Release
         | _                                -> None
 
-type SemVer    = SemVer of Major:int * Minor:int * Patch:int
-type FSharpVer = FSharpVer of Framework:int * Major:int * Minor:int * Patch:int
+type SemVer =
+    | SemVer of Major:int * Minor:int * Patch:int
+
+    override self.ToString () = self |> function
+        | SemVer (maj, min, p) -> sprintf "%d.%d.%d"  maj min p
+
+
+type FSharpVer =
+    | FSharpVer of Framework:int * Major:int * Minor:int * Patch:int
+
+     override self.ToString () = self |> function
+        | FSharpVer (f,maj, min, p) -> sprintf "%d.%d.%d.%d" f maj min p
 
 //   Framework Versions :
 type FrameworkVersion =
@@ -182,7 +189,7 @@ type FrameworkVersion =
     | V1_4
     | V1_5
     | V1_6
-    | V_4_5
+    | V4_5
     | V4_5_1
     | V4_6
     | V4_6_1
@@ -196,7 +203,7 @@ type FrameworkVersion =
         | V1_4   -> "v1.4"
         | V1_5   -> "v1.5"
         | V1_6   -> "v1.6"
-        | V_4_5  -> "v4.5"
+        | V4_5  -> "v4.5"
         | V4_5_1 -> "v4.5.1"
         | V4_6   -> "v4.6"
         | V4_6_1 -> "v4.6.1"

@@ -46,4 +46,76 @@ let getCondition (condition : Condition) : string =
 
     if fvp <> "" && b <> "" then fvp + " AND " + b else fvp + b
 
+type ConditionParseResult =
+    | FrameworkTarget of FrameworkTarget
+    | FrameworkVersion of FrameworkVersion
+    | PlatformType of PlatformType
+    | BuildType of BuildType
+
+
+let tryParseTarget = function
+    | InvariantEqual "netcore" -> Some FrameworkTarget.NetcoreApp
+    | InvariantEqual "net" -> Some FrameworkTarget.Net
+    | InvariantEqual "netStandard" -> Some FrameworkTarget.NetStandard
+    | _ ->  None
+
+let tryParseVersion = function
+    | InvariantEqual "1.0" -> Some V1_0
+    | InvariantEqual "1.1" -> Some V1_1
+    | InvariantEqual "1.2" -> Some V1_2
+    | InvariantEqual "1.3" -> Some V1_3
+    | InvariantEqual "1.4" -> Some V1_4
+    | InvariantEqual "1.5" -> Some V1_5
+    | InvariantEqual "1.6" -> Some V1_6
+    | InvariantEqual "4.5" -> Some V4_5
+    | InvariantEqual "4.5.1" -> Some V4_5_1
+    | InvariantEqual "4.6" -> Some V4_6
+    | InvariantEqual "4.6.1" -> Some V4_6_1
+    | InvariantEqual "4.6.2" -> Some V4_6_2
+    | _ -> None
+
+let tryParsePlatform = function
+    | InvariantEqual "AnyCPU" -> Some AnyCPU
+    | InvariantEqual "x86" -> Some X86
+    | InvariantEqual "x64" -> Some X64
+    | _ -> None
+
+let tryParseBuildType = function
+    | InvariantEqual "Debug" -> Some BuildType.Debug
+    | InvariantEqual "Release" -> Some BuildType.Release
+    | _ -> None
+
+
+let private parsePart (cond : string) : ConditionParseResult option =
+    match tryParseTarget cond, tryParseVersion cond, tryParsePlatform cond, tryParseBuildType cond with
+    | Some c, _,_,_ ->  FrameworkTarget c |> Some
+    | _, Some c, _, _ -> FrameworkVersion c |> Some
+    | _, _, Some c, _ -> PlatformType c |> Some
+    | _,_,_, Some c -> BuildType c |> Some
+    | _ -> None
+
+let apply condition parseResult  =
+    match parseResult with
+    | FrameworkTarget c -> {condition with FrameworkTarget = Some c}
+    | FrameworkVersion c -> {condition with FrameworkVersion = Some c}
+    | PlatformType c -> {condition with PlatformType = Some c}
+    | BuildType c -> {condition with BuildType = Some c}
+
+let parseTomlCondition (condition : string) : Condition =
+    let results =
+        if condition.Contains "." |> not then
+            parsePart condition |> Array.singleton
+        else
+            condition.Split '.' |> Array.map parsePart
+
+    let empty =
+        {
+            FrameworkTarget = None
+            FrameworkVersion = None
+            PlatformType = None
+            BuildType = None
+        }
+    results
+    |> Array.choose id
+    |> Array.fold apply empty
 
