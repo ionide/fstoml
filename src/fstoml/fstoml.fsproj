@@ -45,7 +45,6 @@
   <ItemGroup>
     <None Include="paket.references" />
     <Compile Include="Prelude.fs" />
-    <Compile Include="XLinq.fs" />
     <Compile Include="Constants.fs" />
     <Compile Include="ProjectSystem.fs" />
     <Compile Include="Conditions.fs" />

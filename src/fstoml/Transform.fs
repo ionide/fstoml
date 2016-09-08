@@ -22,10 +22,10 @@ let optProperty name data =
 
 let transformOutputType (input : FsToml.ProjectSystem.OutputType) =
     match input with
-    | Exe     -> Forge.ProjectSystem.Exe
-    | Library -> Forge.ProjectSystem.Library
-    | Module  -> Forge.ProjectSystem.Module
-    | Winexe  -> Forge.ProjectSystem.Winexe
+    | OutputType.Exe     -> Forge.ProjectSystem.Exe
+    | OutputType.Library -> Forge.ProjectSystem.Library
+    | OutputType.Module  -> Forge.ProjectSystem.Module
+    | OutputType.Winexe  -> Forge.ProjectSystem.Winexe
 
 let transformDebugType (input : DebugType) =
     match input with

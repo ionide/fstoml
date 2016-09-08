@@ -53,6 +53,26 @@ type TomlProject () =
     member val References        : References []        = [||] with get,set
     member val ProjectReferences : ProjectReferences [] = [||] with get,set
 
+let parseDebugType = function
+    | InvariantEqual Constants.None    -> Some DebugType.None
+    | InvariantEqual Constants.PdbOnly -> Some DebugType.PdbOnly
+    | InvariantEqual Constants.Full    -> Some DebugType.Full
+    | _                                -> None
+
+let parseCopyToOutput = function
+    | InvariantEqual Constants.Never          -> Some CopyToOutputDirectory.Never
+    | InvariantEqual Constants.Always         -> Some CopyToOutputDirectory.Always
+    | InvariantEqual Constants.PreserveNewest -> Some CopyToOutputDirectory.PreserveNewest
+    | _                                       -> None
+
+let parseOutputType t = t |> function
+    | InvariantEqual Constants.Exe     -> OutputType.Exe
+    | InvariantEqual Constants.Winexe  -> OutputType.Winexe
+    | InvariantEqual Constants.Library -> OutputType.Library
+    | InvariantEqual Constants.Module  -> OutputType.Module
+    | _ ->
+        failwithf "Could not parse '%s' into a `OutputType`" t
+
 let getConfig condition (proj : TomlProject) =
     let cond =  Conditions.parseTomlCondition condition
     {
@@ -60,7 +80,7 @@ let getConfig condition (proj : TomlProject) =
         Tailcalls         = proj.Tailcalls |> Option.ofNullable
         WarningsAsErrors  = proj.WarningsAsErrors |> Option.ofNullable
         Constants         = if proj.Constants |> Array.isEmpty then None else Some proj.Constants
-        DebugType         = proj.DebugType |> DebugType.TryParse
+        DebugType         = proj.DebugType |> parseDebugType
         DebugSymbols      = proj.DebugSymbols |> Option.ofNullable
         Optimize          = proj.Optimize |> Option.ofNullable
         Prefer32bit       = proj.Prefer32bit |> Option.ofNullable
@@ -121,7 +141,7 @@ let toProjectSystem (proj : TomlProject) : FsTomlProject =
             {
                 SourceFile.Include = incld
                 Link = if f.Link = "" then None else Some f.Link
-                Copy = f.Copy |> CopyToOutputDirectory.TryParse
+                Copy = f.Copy |> parseCopyToOutput
                 OnBuild = ba
             }
         )
@@ -132,7 +152,7 @@ let toProjectSystem (proj : TomlProject) : FsTomlProject =
         AssemblyName = proj.AssemblyName
         RootNamespace = proj.RootNamespace
         Guid = proj.Guid
-        OutputType = proj.OutputType |> OutputType.Parse
+        OutputType = proj.OutputType |> parseOutputType
         FSharpCore = fsharpVersion
         Configurations = [|config|]
         ProjectReferences = projRefs

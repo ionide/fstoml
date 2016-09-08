@@ -13,7 +13,7 @@ let getFrameworkVersionCondition (version : FrameworkVersion) : string =
     sprintf "'$(TargetFrameworkVersion)' == '%s'" ^ version.ToString()
 
 let getBuildTypeCondition (buildType : BuildType) : string =
-    sprintf "'$(Configuration)' =='%s'" ^ buildType.ToString()
+    sprintf "'$(Configuration)' == '%s'" ^ buildType.ToString()
 
 let getCondition (condition : Condition) : string =
     let framework = condition.FrameworkTarget
@@ -60,24 +60,24 @@ let tryParseTarget = function
     | _ ->  None
 
 let tryParseVersion = function
-    | InvariantEqual "1.0" -> Some V1_0
-    | InvariantEqual "1.1" -> Some V1_1
-    | InvariantEqual "1.2" -> Some V1_2
-    | InvariantEqual "1.3" -> Some V1_3
-    | InvariantEqual "1.4" -> Some V1_4
-    | InvariantEqual "1.5" -> Some V1_5
-    | InvariantEqual "1.6" -> Some V1_6
-    | InvariantEqual "4.5" -> Some V4_5
-    | InvariantEqual "4.5.1" -> Some V4_5_1
-    | InvariantEqual "4.6" -> Some V4_6
-    | InvariantEqual "4.6.1" -> Some V4_6_1
-    | InvariantEqual "4.6.2" -> Some V4_6_2
+    | InvariantEqual "1.0" -> Some FrameworkVersion.V1_0
+    | InvariantEqual "1.1" -> Some FrameworkVersion.V1_1
+    | InvariantEqual "1.2" -> Some FrameworkVersion.V1_2
+    | InvariantEqual "1.3" -> Some FrameworkVersion.V1_3
+    | InvariantEqual "1.4" -> Some FrameworkVersion.V1_4
+    | InvariantEqual "1.5" -> Some FrameworkVersion.V1_5
+    | InvariantEqual "1.6" -> Some FrameworkVersion.V1_6
+    | InvariantEqual "4.5" -> Some FrameworkVersion.V4_5
+    | InvariantEqual "4.5.1" -> Some FrameworkVersion.V4_5_1
+    | InvariantEqual "4.6" -> Some FrameworkVersion.V4_6
+    | InvariantEqual "4.6.1" -> Some FrameworkVersion.V4_6_1
+    | InvariantEqual "4.6.2" -> Some FrameworkVersion.V4_6_2
     | _ -> None
 
 let tryParsePlatform = function
-    | InvariantEqual "AnyCPU" -> Some AnyCPU
-    | InvariantEqual "x86" -> Some X86
-    | InvariantEqual "x64" -> Some X64
+    | InvariantEqual "AnyCPU" -> Some PlatformType.AnyCPU
+    | InvariantEqual "x86" -> Some PlatformType.X86
+    | InvariantEqual "x64" -> Some PlatformType.X64
     | _ -> None
 
 let tryParseBuildType = function
