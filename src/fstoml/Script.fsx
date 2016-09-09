@@ -1,36 +1,71 @@
 System.IO.Directory.SetCurrentDirectory __SOURCE_DIRECTORY__
-#r "../../packages/nett/lib/net40/nett.dll"
+
+#r "bin/release/Nett.dll"
+#r "bin/release/Forge.ProjectSystem.dll"
 #r "bin/release/fstoml.dll"
-
-open Nett
-open System
-
-
-type FsTomlProject () =
-    member val FsTomlVersion : string = "" with get, set
-    member val Name : string          = "" with get, set
-    member val AssemblyName : string  = "" with get, set
-    member val RootNamespace : string = "" with get, set
-    member val Guid : Guid            = Guid.Empty with get, set
-    member val OutputType : string    = "" with get, set
-    member val FSharpCore : string    = "" with get, set
-    member val DebugSymbols : bool    = false with get, set
-    member val DebugType : string     = "" with get, set
-    member val Optimize : bool        = false with get, set
-    member val NoWarn : int []        = [||] with get, set
-    member val OtherFlags : string [] = [||] with get, set
+#r "System.Xml"
+#r "System.Xml.Linq"
 
 
-let table = Toml.ReadFile<FsTomlProject> "testproject.toml";;
+let t = FsToml.Parser.parse "testproject.toml"
+let p = FsToml.Transform.transform t
+let f = p.ToXmlString()
+f
 
-table.AssemblyName;;
-table.DebugSymbols;;
-table.DebugType;;
-table.FSharpCore;;
-table.FsTomlVersion;;
-table.Guid;;
-table.Name;;
-table.RootNamespace;;
-table.OtherFlags;;
-//|> Seq.iter (fun kvp -> printfn "%A - %A" kvp.Key (kvp.Value.Get<_>))
+//OUTPUT:
 
+// "<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+// <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+//   <PropertyGroup>
+//     <Name>Library1</Name>
+//     <AssemblyName>Library1</AssemblyName>
+//     <RootNamespace>Library1</RootNamespace>
+//     <SchemaVersion>2.0</SchemaVersion>
+//     <ProjectGuid>bb0c6f01-5e57-4575-a498-5de850d9fa6c</ProjectGuid>
+//     <OutputType>Library</OutputType>
+//     <TargetFSharpCoreVersion>FsToml.ProjectSystem+FSharpVer</TargetFSharpCoreVersion>
+//   </PropertyGroup>
+//   <PropertyGroup Condition="">
+//     <DebugSymbols>true</DebugSymbols>
+//     <DebugType>Full</DebugType>
+//     <Optimize>false</Optimize>
+//     <OtherFlags>--warnon:1182</OtherFlags>
+//   </PropertyGroup>
+//   <PropertyGroup Condition="('$(TargetFrameworkIdentifier)' == '.NETCoreApp')">
+//     <DebugSymbols>false</DebugSymbols>
+//   </PropertyGroup>
+//   <PropertyGroup Condition="('$(TargetFrameworkIdentifier)' == '.NETCoreApp') AND ('$(Configuration)' =='Release')">
+//     <DebugType>PdbOnly</DebugType>
+//     <Optimize>true</Optimize>
+//     <DefineConstants>RELEASE;FABLE</DefineConstants>
+//   </PropertyGroup>
+//   <PropertyGroup Condition="('$(TargetFrameworkIdentifier)' == '.NETCoreApp') AND ('$(Platform)' == 'x86') AND ('$(Configuration)' =='Release')">
+//     <OutputPath>bin/Release/x86</OutputPath>
+//   </PropertyGroup>
+//   <PropertyGroup Condition="('$(TargetFrameworkIdentifier)' == '.NETCoreApp') AND ('$(Platform)' == 'x64') AND ('$(Configuration)' =='Release')">
+//     <OutputPath>bin/Release/x64</OutputPath>
+//   </PropertyGroup>
+//   <ItemGroup>
+//     <Reference Include="System" />
+//     <Reference Include="FSharp.Core" />
+//     <Reference Include="Fable.Core">
+//       <Private>False</Private>
+//     </Reference>
+//   </ItemGroup>
+//   <ItemGroup>
+//     <ProjectReference Include="">
+//       <Name>Deppy</Name>
+//       <Project>{f3d0b372-3af7-49d9-98ed-5a78e9416098}</Project>
+//       <Private>False</Private>
+//     </ProjectReference>
+//   </ItemGroup>
+//   <ItemGroup>
+//     <None Include="paket.references" />
+//     <Compile Include="src/file.fs" />
+//     <Compile Include="src/file2.fs">
+//       <Link>src/uselessLink.fs</Link>
+//     </Compile>
+//     <Compile Include="src/file3.fs" />
+//     <None Include="src/script.fsx" />
+//   </ItemGroup>
+// </Project>"
