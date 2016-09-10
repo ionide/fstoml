@@ -1,7 +1,8 @@
-module fstoml.Tests
+module FsToml.Tests.Conditions
 
 open FsToml
 open NUnit.Framework
+
 
 [<Test>]
 let ``hello returns 42`` () =
