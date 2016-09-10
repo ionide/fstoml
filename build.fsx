@@ -8,6 +8,7 @@ open Fake.Git
 open Fake.AssemblyInfoFile
 open Fake.ReleaseNotesHelper
 open Fake.UserInputHelper
+open Fake.Testing
 open System
 open System.IO
 #if MONO
@@ -145,11 +146,11 @@ Target "Build" (fun _ ->
 
 Target "RunTests" (fun _ ->
     !! testAssemblies
-    |> NUnit (fun p ->
+    |> NUnit3  (fun p ->
         { p with
-            DisableShadowCopy = true
+            ShadowCopy = true
             TimeOut = TimeSpan.FromMinutes 20.
-            OutputFile = "TestResults.xml" })
+            OutputDir  = "TestResults.xml" })
 )
 
 #if MONO
@@ -406,5 +407,5 @@ Target "All" DoNothing
 
 "ReleaseDocs"
   ==> "Release"
-  
+
 RunTargetOrDefault "All"
