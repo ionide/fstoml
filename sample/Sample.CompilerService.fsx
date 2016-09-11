@@ -17,10 +17,10 @@ let target = {
     BuildType = BuildType.Release  }
 
 let t = FsToml.Parser.parse "testproject.toml"
-let p = FsToml.Transform.CompilerService.toCompilerParams target t
+let p = FsToml.Transform.CompilerService.getCompilerParams target t
 p
 
 // [|"-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5\\mscorlib.dll";
+//     "-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\FSharp\\.NETFramework\\v4.0\\4.4.0.0\\FSharp.Core.dll";
 //     "-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5\\System.dll";
-//     "-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5\\FSharp.Core.dll";
 //     "-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5\\Fable.Core.dll"|]

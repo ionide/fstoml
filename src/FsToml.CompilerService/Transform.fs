@@ -89,6 +89,14 @@ module References =
             let (++) a b = Path.Combine(a,b)
             sysDir ++ nm + ".dll"
 
+    let fsCore ver =
+        if System.Environment.OSVersion.Platform = System.PlatformID.Win32NT then
+            // file references only valid on Windows
+            System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFilesX86) +
+            @"\Reference Assemblies\Microsoft\FSharp\.NETFramework\v4.0\" + ver + @"\FSharp.Core.dll"
+        else
+            sysLib ver "FSharp.Core"
+
     let getPathToReference (target : Target) (reference : Reference) : string =
         if Path.IsPathRooted reference.Include then reference.Include
         elif File.Exists reference.Include then Path.GetFullPath reference.Include
@@ -99,18 +107,22 @@ module References =
     let getReferences target = Array.map (getPathToReference target)
 
 
-let toCompilerParams (target : Target) (project : FsTomlProject) =
+let getCompilerParams (target : Target) (project : FsTomlProject) =
     let cfg = project.Configurations |> Configuration.getConfig target
-    let references = project.References |> References.getReferences target
+    let references =
+        project.References
+        |> Array.filter (fun r -> r.Include <> "FSharp.Core" && r.Include <> "mscorlib")
+        |> References.getReferences target
     [|
         yield "-r:" + (References.sysLib  (target.FrameworkVersion.ToString()) "mscorlib")
+        yield "-r:" + (References.fsCore (project.FSharpCore.ToString()))
         for r in references do
             yield "-r:" + r
     |]
 
 
 let getFSharpProjectOptions  (target : Target) (project : FsTomlProject) =
-    let parms = toCompilerParams target project
+    let parms = getCompilerParams target project
     let checker = FSharpChecker.Instance
     checker.GetProjectOptionsFromCommandLineArgs (project.Name, parms)
 
