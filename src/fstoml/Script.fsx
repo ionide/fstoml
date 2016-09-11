@@ -14,7 +14,7 @@ f
 
 //OUTPUT:
 
-// "<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+// <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 // <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 //   <PropertyGroup>
 //     <Name>Library1</Name>
@@ -23,7 +23,7 @@ f
 //     <SchemaVersion>2.0</SchemaVersion>
 //     <ProjectGuid>bb0c6f01-5e57-4575-a498-5de850d9fa6c</ProjectGuid>
 //     <OutputType>Library</OutputType>
-//     <TargetFSharpCoreVersion>FsToml.ProjectSystem+FSharpVer</TargetFSharpCoreVersion>
+//     <TargetFSharpCoreVersion>4.4.0.0</TargetFSharpCoreVersion>
 //   </PropertyGroup>
 //   <PropertyGroup Condition="">
 //     <DebugSymbols>true</DebugSymbols>
@@ -34,15 +34,15 @@ f
 //   <PropertyGroup Condition="('$(TargetFrameworkIdentifier)' == '.NETCoreApp')">
 //     <DebugSymbols>false</DebugSymbols>
 //   </PropertyGroup>
-//   <PropertyGroup Condition="('$(TargetFrameworkIdentifier)' == '.NETCoreApp') AND ('$(Configuration)' =='Release')">
+//   <PropertyGroup Condition="('$(TargetFrameworkIdentifier)' == '.NETCoreApp') AND ('$(Configuration)' == 'Release')">
 //     <DebugType>PdbOnly</DebugType>
 //     <Optimize>true</Optimize>
 //     <DefineConstants>RELEASE;FABLE</DefineConstants>
 //   </PropertyGroup>
-//   <PropertyGroup Condition="('$(TargetFrameworkIdentifier)' == '.NETCoreApp') AND ('$(Platform)' == 'x86') AND ('$(Configuration)' =='Release')">
+//   <PropertyGroup Condition="('$(TargetFrameworkIdentifier)' == '.NETCoreApp') AND ('$(TargetFrameworkVersion)' == 'v1.6') AND ('$(Platform)' == 'x86') AND ('$(Configuration)' == 'Release')">
 //     <OutputPath>bin/Release/x86</OutputPath>
 //   </PropertyGroup>
-//   <PropertyGroup Condition="('$(TargetFrameworkIdentifier)' == '.NETCoreApp') AND ('$(Platform)' == 'x64') AND ('$(Configuration)' =='Release')">
+//   <PropertyGroup Condition="('$(TargetFrameworkIdentifier)' == '.NETCoreApp') AND ('$(TargetFrameworkVersion)' == 'v1.6') AND ('$(Platform)' == 'x64') AND ('$(Configuration)' == 'Release')">
 //     <OutputPath>bin/Release/x64</OutputPath>
 //   </PropertyGroup>
 //   <ItemGroup>
@@ -68,4 +68,4 @@ f
 //     <Compile Include="src/file3.fs" />
 //     <None Include="src/script.fsx" />
 //   </ItemGroup>
-// </Project>"
+// </Project>

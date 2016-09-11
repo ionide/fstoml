@@ -60,18 +60,18 @@ let tryParseTarget = function
     | _ ->  None
 
 let tryParseVersion = function
-    | InvariantEqual "1.0" -> Some FrameworkVersion.V1_0
-    | InvariantEqual "1.1" -> Some FrameworkVersion.V1_1
-    | InvariantEqual "1.2" -> Some FrameworkVersion.V1_2
-    | InvariantEqual "1.3" -> Some FrameworkVersion.V1_3
-    | InvariantEqual "1.4" -> Some FrameworkVersion.V1_4
-    | InvariantEqual "1.5" -> Some FrameworkVersion.V1_5
-    | InvariantEqual "1.6" -> Some FrameworkVersion.V1_6
-    | InvariantEqual "4.5" -> Some FrameworkVersion.V4_5
-    | InvariantEqual "4.5.1" -> Some FrameworkVersion.V4_5_1
-    | InvariantEqual "4.6" -> Some FrameworkVersion.V4_6
-    | InvariantEqual "4.6.1" -> Some FrameworkVersion.V4_6_1
-    | InvariantEqual "4.6.2" -> Some FrameworkVersion.V4_6_2
+    | InvariantEqual "1_0" -> Some FrameworkVersion.V1_0
+    | InvariantEqual "1_1" -> Some FrameworkVersion.V1_1
+    | InvariantEqual "1_2" -> Some FrameworkVersion.V1_2
+    | InvariantEqual "1_3" -> Some FrameworkVersion.V1_3
+    | InvariantEqual "1_4" -> Some FrameworkVersion.V1_4
+    | InvariantEqual "1_5" -> Some FrameworkVersion.V1_5
+    | InvariantEqual "1_6" -> Some FrameworkVersion.V1_6
+    | InvariantEqual "4_5" -> Some FrameworkVersion.V4_5
+    | InvariantEqual "4_5_1" -> Some FrameworkVersion.V4_5_1
+    | InvariantEqual "4_6" -> Some FrameworkVersion.V4_6
+    | InvariantEqual "4_6_1" -> Some FrameworkVersion.V4_6_1
+    | InvariantEqual "4_6_2" -> Some FrameworkVersion.V4_6_2
     | _ -> None
 
 let tryParsePlatform = function

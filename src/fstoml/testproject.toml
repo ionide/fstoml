@@ -42,10 +42,10 @@ OtherFlags = [ '--warnon:1182' ]
     DebugType = 'pdbonly'
     Optimize = true
 
-[ netcore."1.6".Release.x86 ]
+[ netcore."1_6".Release.x86 ]
     OutputPath = "bin/Release/x86"
 
-[ netcore."1.6".Release.x64 ]
+[ netcore."1_6".Release.x64 ]
     OutputPath = "bin/Release/x64"
 
 
