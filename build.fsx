@@ -132,7 +132,7 @@ Target "CleanDocs" (fun _ ->
 // Build library & test project
 
 Target "Build" (fun _ ->
-    !! solutionFile
+    !! "src/**/*.??proj"
 #if MONO
     |> MSBuildReleaseExt "" [ ("DefineConstants","MONO") ] "Rebuild"
 #else
