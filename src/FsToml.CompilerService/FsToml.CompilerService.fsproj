@@ -47,6 +47,7 @@
   <ItemGroup>
     <None Include="paket.references" />
     <Compile Include="Transform.fs" />
+    <Compile Include="AssemblyInfo.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Choose>
