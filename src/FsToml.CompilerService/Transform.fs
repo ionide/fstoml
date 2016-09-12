@@ -11,6 +11,7 @@ type Target = {
 }
 
 module Configuration =
+    open System.IO
 
     let satisfy (target : Target) (condition : Condition) =
         let result =
@@ -75,6 +76,47 @@ module Configuration =
         |> Seq.map fst
         |> Seq.fold sum emptyConfig
 
+    let getCompilerParams (target : Target) (name : string) (cfg : Configuration) =
+
+        let debug =
+            if cfg.DebugSymbols |> Option.exists id then ":full"
+            elif cfg.DebugType.IsSome then
+                match cfg.DebugType.Value with
+                | DebugType.None -> "-"
+                | DebugType.Full -> ":full"
+                | DebugType.PdbOnly -> ":pdbonly"
+            else "-"
+
+        let platofrm =
+            if target.PlatformType = PlatformType.AnyCPU && cfg.Prefer32bit |> Option.exists id then
+                "anycpu32bitpreferred"
+            else
+                target.PlatformType.ToString()
+
+        let outPath = defaultArg (cfg.OutputPath |> Option.map (fun p -> Path.Combine(p,name))) (Path.Combine("bin", name))
+        let xmlPath = defaultArg cfg.DocumentationFile (outPath + ".xml")
+
+        [|
+            yield "--tailcalls" + if cfg.Tailcalls |> Option.exists id then "+" else "-"
+            yield "--warnaserror" + if cfg.WarningsAsErrors |> Option.exists id then "+" else "-"
+
+            if cfg.Constants.IsSome then
+                for c in cfg.Constants.Value do
+                    yield "-d:" + c
+            yield "--debug" + debug
+            yield "--optimize" + if cfg.Optimize |> Option.exists id then "+" else "-"
+            yield "--platofrm:" + platofrm
+            yield "--warn:" + string (defaultArg cfg.WarningLevel 3)
+            yield "--out:" + outPath
+            yield "--doc:" + xmlPath
+            match cfg.NoWarn with
+            | None | Some [||] -> ()
+            | Some nowarns -> yield "--nowarn:" + (nowarns |> Seq.map (string) |> String.concat ",")
+            match cfg.OtherFlags with
+            | None | Some [||] -> ()
+            | Some flags -> yield! flags
+        |]
+
 module References =
     open System
     open System.IO
@@ -103,21 +145,47 @@ module References =
         else
             sysLib (target.FrameworkVersion.ToString()) reference.Include
 
+    let getCompilerParams target fsharpCore (refs : Reference[]) =
+        let references =
+            refs
+            |> Array.filter (fun r -> r.Include <> "FSharp.Core" && r.Include <> "mscorlib")
+            |> Array.map (getPathToReference target)
+        [|
+            yield "-r:" + (sysLib  (target.FrameworkVersion.ToString()) "mscorlib")
+            yield "-r:" + (fsCore fsharpCore)
+            for r in references do
+                yield "-r:" + r
+        |]
 
-    let getReferences target = Array.map (getPathToReference target)
+module Files =
+    let getCompilerParams (files : SourceFile[]) =
+        files
+        |> Array.filter(fun r -> r.OnBuild = BuildAction.Compile)
+        |> Array.map(fun r -> r.Link |> Option.fold (fun s e -> e) r.Include)
+
 
 
 let getCompilerParams (target : Target) (project : FsTomlProject) =
-    let cfg = project.Configurations |> Configuration.getConfig target
-    let references =
-        project.References
-        |> Array.filter (fun r -> r.Include <> "FSharp.Core" && r.Include <> "mscorlib")
-        |> References.getReferences target
+    let name =
+        project.AssemblyName +
+            match project.OutputType with
+            | OutputType.Library -> ".dll"
+            | _ -> ".exe"
+
+    let cfg = project.Configurations |> Configuration.getConfig target |> Configuration.getCompilerParams target name
+    let refs = project.References |> References.getCompilerParams target (project.FSharpCore.ToString())
+    let files = project.Files |> Files.getCompilerParams
+
     [|
-        yield "-r:" + (References.sysLib  (target.FrameworkVersion.ToString()) "mscorlib")
-        yield "-r:" + (References.fsCore (project.FSharpCore.ToString()))
-        for r in references do
-            yield "-r:" + r
+        yield "--noframework"
+        yield "--fullpaths"
+        yield "--flaterrors"
+        yield "--subsystemversion:6.00"
+        yield "--highentropyva+"
+        yield "--target:" + project.OutputType.ToString()
+        yield! cfg
+        yield! refs
+        yield! files
     |]
 
 

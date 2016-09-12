@@ -20,7 +20,13 @@ let t = FsToml.Parser.parse "testproject.toml"
 let p = FsToml.Transform.CompilerService.getCompilerParams target t
 p
 
-// [|"-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5\\mscorlib.dll";
+// [|"--noframework"; "--fullpaths"; "--flaterrors"; "--subsystemversion:6.00";
+//     "--highentropyva+"; "--target:Library"; "--tailcalls-"; "--warnaserror-";
+//     "--debug:full"; "--optimize-"; "--platofrm:AnyCPU"; "--warn:3";
+//     "--out:bin\\Library1.dll"; "--doc:bin\\Library1.dll.xml"; "--nowarn:52,40";
+//     "--warnon:1182";
+//     "-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5\\mscorlib.dll";
 //     "-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\FSharp\\.NETFramework\\v4.0\\4.4.0.0\\FSharp.Core.dll";
 //     "-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5\\System.dll";
-//     "-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5\\Fable.Core.dll"|]
+//     "-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5\\Fable.Core.dll";
+//     "src/file.fs"; "src/uselessLink.fs"; "src/file3.fs"|]
