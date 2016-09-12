@@ -1,82 +1,15 @@
 module FsToml.Transform.CompilerService
 
+open FsToml
 open FsToml.ProjectSystem
 open Microsoft.FSharp.Compiler.SourceCodeServices
-
-type Target = {
-    FrameworkTarget   : FrameworkTarget
-    FrameworkVersion  : FrameworkVersion
-    PlatformType      : PlatformType
-    BuildType         : BuildType
-}
 
 module Configuration =
     open System.IO
 
-    let satisfy (target : Target) (condition : Condition) =
-        let result =
-            condition.FrameworkTarget |> Option.forall ((=) target.FrameworkTarget) &&
-            condition.FrameworkVersion |> Option.forall ((=) target.FrameworkVersion) &&
-            condition.PlatformType |> Option.forall ((=) target.PlatformType) &&
-            condition.BuildType |> Option.forall ((=) target.BuildType)
-        let score =
-            (condition.FrameworkTarget |> Option.count) +
-            (condition.FrameworkVersion |> Option.count) +
-            (condition.PlatformType |> Option.count) +
-            (condition.BuildType |> Option.count)
-        result, score
-
-    let emptyCondition = {
-        Condition.FrameworkTarget = None
-        FrameworkVersion = None
-        PlatformType = None
-        BuildType = None
-    }
 
 
-    let emptyConfig ={
-        Condition = emptyCondition
-        Tailcalls = None
-        WarningsAsErrors = None
-        Constants = None
-        DebugType = None
-        DebugSymbols = None
-        Optimize = None
-        Prefer32bit = None
-        WarningLevel = None
-        OutputPath = None
-        DocumentationFile = None
-        NoWarn = None
-        OtherFlags = None
-    }
-
-    let sum state e =
-        {
-            Condition = state.Condition
-            Tailcalls = if state.Tailcalls.IsSome then state.Tailcalls else e.Tailcalls
-            WarningsAsErrors = if state.WarningsAsErrors.IsSome then state.WarningsAsErrors else e.WarningsAsErrors
-            Constants = if state.Constants.IsSome then state.Constants else e.Constants
-            DebugType = if state.DebugType.IsSome then state.DebugType else e.DebugType
-            DebugSymbols = if state.DebugSymbols.IsSome then state.DebugSymbols else e.DebugSymbols
-            Optimize = if state.Optimize.IsSome then state.Optimize else e.Optimize
-            Prefer32bit = if state.Prefer32bit.IsSome then state.Prefer32bit else e.Prefer32bit
-            WarningLevel = if state.WarningLevel.IsSome then state.WarningLevel else e.WarningLevel
-            OutputPath = if state.OutputPath.IsSome then state.OutputPath else e.OutputPath
-            DocumentationFile = if state.DocumentationFile.IsSome then state.DocumentationFile else e.DocumentationFile
-            NoWarn = if state.NoWarn.IsSome then state.NoWarn else e.NoWarn
-            OtherFlags = if state.OtherFlags.IsSome then state.OtherFlags else e.OtherFlags
-
-        }
-
-    let getConfig (target : Target) (cfgs : Configuration[]) : Configuration =
-        cfgs
-        |> Seq.map (fun c -> c, (satisfy target c.Condition))
-        |> Seq.choose (fun (c, (res, score)) -> if res then Some (c,score) else None)
-        |> Seq.sortByDescending snd
-        |> Seq.map fst
-        |> Seq.fold sum emptyConfig
-
-    let getCompilerParams (target : Target) (name : string) (cfg : Configuration) =
+    let getCompilerParams (target : Target.Target) (name : string) (cfg : Configuration) =
 
         let debug =
             if cfg.DebugSymbols |> Option.exists id then ":full"
@@ -120,12 +53,16 @@ module Configuration =
 module References =
     open System
     open System.IO
+    open System.Reflection
+
+    let getPath ver nm =
+         Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) +
+         @"\Reference Assemblies\Microsoft\Framework\.NETFramework\" + ver + "\\" + nm + ".dll"
 
     let sysLib ver nm =
         if Environment.OSVersion.Platform = PlatformID.Win32NT then
             // file references only valid on Windows
-            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) +
-            @"\Reference Assemblies\Microsoft\Framework\.NETFramework\" + ver + "\\" + nm + ".dll"
+            getPath ver nm
         else
             let sysDir = System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory()
             let (++) a b = Path.Combine(a,b)
@@ -139,17 +76,47 @@ module References =
         else
             sysLib ver "FSharp.Core"
 
-    let getPathToReference (target : Target) (reference : Reference) : string =
-        if Path.IsPathRooted reference.Include then reference.Include
-        elif File.Exists reference.Include then Path.GetFullPath reference.Include
+    let dependsOnFacade path  =
+        let a = Assembly.LoadFile path
+        a.GetReferencedAssemblies()
+        |> Array.exists (fun an -> an.Name.Contains "System.Runtime")
+
+    let getFacade ver =
+        Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) +
+        @"\Reference Assemblies\Microsoft\Framework\.NETFramework\" + ver + "\\Facades\\"
+        |> Directory.GetFiles
+
+        // let res =
+        //     let a = Assembly.LoadFile path
+        //     a.GetReferencedAssemblies()
+        //     |> Array.map (fun an -> an.Name |> sysLib ver)
+        //     |> Array.filter((<>) "")
+
+        // if res.Length > 0 && res |> Array.forall (fun n -> lst |> Array.contains n ) then lst
+        // else
+        //     let l = Array.append res lst |> Array.distinct
+        //     res |> Array.collect (getDependentReferences ver l)
+
+    let getPathToReference (target : Target.Target) (reference : Reference) : string[] =
+        let ver = target.FrameworkVersion.ToString()
+
+        if Path.IsPathRooted reference.Include then
+
+
+            [| yield reference.Include; if dependsOnFacade reference.Include then yield! getFacade ver  |]
+        elif File.Exists reference.Include then
+            let p = Path.GetFullPath reference.Include
+            [| yield p; if dependsOnFacade p then yield! getFacade ver |]
         else
-            sysLib (target.FrameworkVersion.ToString()) reference.Include
+            [| sysLib ver reference.Include |]
 
     let getCompilerParams target fsharpCore (refs : Reference[]) =
         let references =
             refs
-            |> Array.filter (fun r -> r.Include <> "FSharp.Core" && r.Include <> "mscorlib")
             |> Array.map (getPathToReference target)
+            |> Array.collect id
+            |> Array.filter (fun r -> r.Contains "FSharp.Core" |> not && r.Contains "mscorlib" |> not)
+            |> Array.distinct
         [|
             yield "-r:" + (sysLib  (target.FrameworkVersion.ToString()) "mscorlib")
             yield "-r:" + (fsCore fsharpCore)
@@ -165,14 +132,16 @@ module Files =
 
 
 
-let getCompilerParams (target : Target) (project : FsTomlProject) =
+
+
+let getCompilerParams (target : Target.Target) (project : FsTomlProject) =
     let name =
         project.AssemblyName +
             match project.OutputType with
             | OutputType.Library -> ".dll"
             | _ -> ".exe"
 
-    let cfg = project.Configurations |> Configuration.getConfig target |> Configuration.getCompilerParams target name
+    let cfg = project.Configurations |> Target.getConfig target |> Configuration.getCompilerParams target name
     let refs = project.References |> References.getCompilerParams target (project.FSharpCore.ToString())
     let files = project.Files |> Files.getCompilerParams
 
@@ -189,7 +158,7 @@ let getCompilerParams (target : Target) (project : FsTomlProject) =
     |]
 
 
-let getFSharpProjectOptions  (target : Target) (project : FsTomlProject) =
+let getFSharpProjectOptions  (target : Target.Target) (project : FsTomlProject) =
     let parms = getCompilerParams target project
     let checker = FSharpChecker.Instance
     checker.GetProjectOptionsFromCommandLineArgs (project.Name, parms)

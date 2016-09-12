@@ -47,6 +47,7 @@
     <Compile Include="Conditions.fs" />
     <Compile Include="Parser.fs" />
     <Content Include="App.config" />
+    <Compile Include="Target.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Choose>

@@ -1,0 +1,54 @@
+﻿
+FsTomlVersion   = '0.0.1'
+Name            = 'FsToml.CompilerService'
+AssemblyName    = 'FsToml.CompilerService'
+RootNamespace   = 'FsToml.CompilerService'
+Guid            = 'cb1359ac-44ed-46ec-8eee-7ac0f73c79f2'
+OutputType      = 'Library'
+FSharpCore      = '4.4.0.0'
+
+
+Files = [
+    { None = "paket.references" },
+    { Compile = "Transform.fs" },
+    { Compile = "AssemblyInfo.fs"}
+]
+
+References = [
+    { Include = "System" },
+    { Include = "System.Core" },
+    { Include = "System.Numerics" },
+    { Include = "System.Xml" },
+    { Include = "System.Xml.Linq" },
+    { Include = "..\\packages\\FSharp.Compiler.Service\\lib\\net45\\FSharp.Compiler.Service.dll", Private=true},
+    { Include = "..\\packages\\System.Collections.Immutable\\lib\\netstandard1.0\\System.Collections.Immutable.dll", Private=true},
+    { Include = "..\\packages\\System.Reflection.Metadata\\lib\\netstandard1.1\\System.Reflection.Metadata.dll", Private=true}
+]
+
+ProjectReferences = [
+    { Name = 'FsToml.fsproj', Include = '..\FsToml\FsToml.fsproj',  Project = "8a5d713d-7ada-4c22-ab94-6ba8345a644b" },
+]
+
+# configurations
+[ Debug ]
+    DebugSymbols = true
+    DebugType = 'full'
+    Optimize = false
+    Tailcalls = false
+    OutputPath = 'bin\\Debug'
+    Constants = [ 'DEBUG', 'TRACE' ]
+    WarningLevel = 3
+
+[ Release ]
+    DebugType = 'pdbonly'
+    Optimize = true
+    Tailcalls = true
+    OutputPath = 'bin\\Release'
+    Constants = [ 'TRACE' ]
+    WarningLevel = 3
+
+
+
+
+
+

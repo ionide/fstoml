@@ -40,10 +40,10 @@ f
 //     <Optimize>true</Optimize>
 //     <DefineConstants>RELEASE;FABLE</DefineConstants>
 //   </PropertyGroup>
-//   <PropertyGroup Condition="('$(TargetFrameworkIdentifier)' == '.NETCoreApp') AND ('$(TargetFrameworkVersion)' == 'v1.6') AND ('$(Platform)' == 'x86') AND ('$(Configuration)' == 'Release')">
+//   <PropertyGroup Condition="('$(TargetFrameworkIdentifier)' == '.NETCoreApp') AND ('$(Platform)' == 'x86') AND ('$(Configuration)' == 'Release')">
 //     <OutputPath>bin/Release/x86</OutputPath>
 //   </PropertyGroup>
-//   <PropertyGroup Condition="('$(TargetFrameworkIdentifier)' == '.NETCoreApp') AND ('$(TargetFrameworkVersion)' == 'v1.6') AND ('$(Platform)' == 'x64') AND ('$(Configuration)' == 'Release')">
+//   <PropertyGroup Condition="('$(TargetFrameworkIdentifier)' == '.NETCoreApp') AND ('$(Platform)' == 'x64') AND ('$(Configuration)' == 'Release')">
 //     <OutputPath>bin/Release/x64</OutputPath>
 //   </PropertyGroup>
 //   <ItemGroup>
@@ -69,4 +69,4 @@ f
 //     <Compile Include="src/file3.fs" />
 //     <None Include="src/script.fsx" />
 //   </ItemGroup>
-// </Project>
+// </Project>"
