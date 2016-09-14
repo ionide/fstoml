@@ -1,14 +1,21 @@
 FRAMEWORK: >= NET45
 NUGET
   remote: https://www.nuget.org/api/v2
+    FSharp.Compiler.Service (6.0.2)
+      System.Collections.Immutable (>= 1.2)
+      System.Reflection.Metadata (>= 1.4.1-beta-24227-04)
+    FSharp.Compiler.Service.ProjectCracker (6.0.2)
     FSharp.Core (4.0.0.1) - redirects: force
     Nett (0.5)
+    System.Collections.Immutable (1.2)
+    System.Reflection.Metadata (1.4.1-beta-24227-04)
+      System.Collections.Immutable (>= 1.2)
 GIT
   remote: https://github.com/fsprojects/Forge.git
-     (1ce1e54d1520837a629b5ca20e9c529c334acdb3)
+     (427145a173bb701acb9249b1500b5fdced6d4bd1)
       build: build.cmd BuildProjectSystem
       os: Windows
-     (1ce1e54d1520837a629b5ca20e9c529c334acdb3)
+     (427145a173bb701acb9249b1500b5fdced6d4bd1)
       build: build.sh BuildProjectSystem
       os: mono
 GROUP Build
