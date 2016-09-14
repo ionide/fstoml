@@ -129,11 +129,15 @@ module ProjectReferences =
         let proj = FsToml.Parser.parse path
         let config = proj.Configurations |> Target.getConfig target
         let name = getName proj
-        Configuration.getOutputPath config name
+        Path.Combine(path |> Path.GetDirectoryName, Configuration.getOutputPath config name)
 
     let getFsprojReference (target : Target.Target) (reference : ProjectReference) =
         let path = reference.Include |> Path.GetFullPath
-        ""
+        let cfg = target.BuildType.ToString()
+        let platform = target.PlatformType.ToString()
+        let proj = ProjectCracker.GetProjectOptionsFromProjectFile(path, [("Configuration", cfg); ("Platform", platform) ])
+        let out = proj.OtherOptions |> Array.pick (fun n -> if n.StartsWith "-o" || n.StartsWith "--o" then Some n else None)
+        out.Replace("--out:", "").Replace("-o:", "")
 
     let getCompilerParams target (references : ProjectReference[]) =
         references |> Array.map (fun r -> "-r:" + if r.Include.EndsWith ".fstoml" then getTomlReference target r else getFsprojReference target r)
@@ -146,10 +150,6 @@ module Files =
         files
         |> Array.filter(fun r -> r.OnBuild = BuildAction.Compile)
         |> Array.map(fun r -> r.Link |> Option.fold (fun s e -> e) r.Include)
-
-
-
-
 
 let getCompilerParams (target : Target.Target) (project : FsTomlProject) =
 

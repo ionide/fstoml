@@ -2,13 +2,16 @@ System.IO.Directory.SetCurrentDirectory __SOURCE_DIRECTORY__
 
 #r "../bin/FsToml.CompilerService/Nett.dll"
 #r "../bin/FsToml.CompilerService/FSharp.Compiler.Service.dll"
+#r "../bin/FsToml.CompilerService/FSharp.Compiler.Service.ProjectCracker.dll"
 #r "../bin/FsToml.CompilerService/FsToml.dll"
 #r "../bin/FsToml.CompilerService/FsToml.CompilerService.dll"
 #r "System.Xml"
 #r "System.Xml.Linq"
 
 open FsToml.ProjectSystem
+open FsToml.Target
 open FsToml.Transform.CompilerService
+open Microsoft.FSharp.Compiler.SourceCodeServices
 
 let target = {
     FrameworkTarget = FrameworkTarget.Net
@@ -19,6 +22,8 @@ let target = {
 let t = FsToml.Parser.parse "testproject.CompilerService.toml"
 let p = FsToml.Transform.CompilerService.getCompilerParams target t
 p
+
+ProjectCracker.GetProjectOptionsFromProjectFile("..\src\FsToml\FsToml.fsproj")
 
 // [|"--noframework"; "--fullpaths"; "--flaterrors"; "--subsystemversion:6.00";
 //     "--highentropyva+"; "--target:Library"; "--tailcalls+"; "--warnaserror-";

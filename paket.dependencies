@@ -4,6 +4,7 @@ framework: >= net45
 nuget FSharp.Core redirects: force
 nuget Nett
 nuget FSharp.Compiler.Service
+nuget FSharp.Compiler.Service.ProjectCracker
 
 git https://github.com/fsprojects/Forge.git master build: "build.cmd BuildProjectSystem", OS: Windows
 git https://github.com/fsprojects/Forge.git master build: "build.sh BuildProjectSystem", OS: mono
