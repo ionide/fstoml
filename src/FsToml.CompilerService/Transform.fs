@@ -4,10 +4,18 @@ open FsToml
 open FsToml.ProjectSystem
 open Microsoft.FSharp.Compiler.SourceCodeServices
 
+let getName project =
+    project.AssemblyName +
+        match project.OutputType with
+        | OutputType.Library -> ".dll"
+        | _ -> ".exe"
+
+
 module Configuration =
     open System.IO
 
-
+    let getOutputPath cfg name =
+         defaultArg (cfg.OutputPath |> Option.map (fun p -> Path.Combine(p,name))) (Path.Combine("bin", name))
 
     let getCompilerParams (target : Target.Target) (name : string) (cfg : Configuration) =
 
@@ -26,7 +34,7 @@ module Configuration =
             else
                 target.PlatformType.ToString()
 
-        let outPath = defaultArg (cfg.OutputPath |> Option.map (fun p -> Path.Combine(p,name))) (Path.Combine("bin", name))
+        let outPath = getOutputPath cfg name
         let xmlPath = defaultArg cfg.DocumentationFile (outPath + ".xml")
 
         [|
@@ -86,17 +94,6 @@ module References =
         @"\Reference Assemblies\Microsoft\Framework\.NETFramework\" + ver + "\\Facades\\"
         |> Directory.GetFiles
 
-        // let res =
-        //     let a = Assembly.LoadFile path
-        //     a.GetReferencedAssemblies()
-        //     |> Array.map (fun an -> an.Name |> sysLib ver)
-        //     |> Array.filter((<>) "")
-
-        // if res.Length > 0 && res |> Array.forall (fun n -> lst |> Array.contains n ) then lst
-        // else
-        //     let l = Array.append res lst |> Array.distinct
-        //     res |> Array.collect (getDependentReferences ver l)
-
     let getPathToReference (target : Target.Target) (reference : Reference) : string[] =
         let ver = target.FrameworkVersion.ToString()
 
@@ -124,6 +121,26 @@ module References =
                 yield "-r:" + r
         |]
 
+module ProjectReferences =
+    open System.IO
+
+    let getTomlReference (target : Target.Target) (reference : ProjectReference) =
+        let path = reference.Include |> Path.GetFullPath
+        let proj = FsToml.Parser.parse path
+        let config = proj.Configurations |> Target.getConfig target
+        let name = getName proj
+        Configuration.getOutputPath config name
+
+    let getFsprojReference (target : Target.Target) (reference : ProjectReference) =
+        let path = reference.Include |> Path.GetFullPath
+        ""
+
+    let getCompilerParams target (references : ProjectReference[]) =
+        references |> Array.map (fun r -> "-r:" + if r.Include.EndsWith ".fstoml" then getTomlReference target r else getFsprojReference target r)
+
+
+
+
 module Files =
     let getCompilerParams (files : SourceFile[]) =
         files
@@ -135,15 +152,12 @@ module Files =
 
 
 let getCompilerParams (target : Target.Target) (project : FsTomlProject) =
-    let name =
-        project.AssemblyName +
-            match project.OutputType with
-            | OutputType.Library -> ".dll"
-            | _ -> ".exe"
 
+    let name = getName project
     let cfg = project.Configurations |> Target.getConfig target |> Configuration.getCompilerParams target name
     let refs = project.References |> References.getCompilerParams target (project.FSharpCore.ToString())
     let files = project.Files |> Files.getCompilerParams
+    let projRefs = project.ProjectReferences |> ProjectReferences.getCompilerParams target
 
     [|
         yield "--noframework"
@@ -154,7 +168,9 @@ let getCompilerParams (target : Target.Target) (project : FsTomlProject) =
         yield "--target:" + project.OutputType.ToString()
         yield! cfg
         yield! refs
+        yield! projRefs
         yield! files
+
     |]
 
 
