@@ -17,17 +17,15 @@ type File () =
     member val Private          : Nullable<bool> = Nullable() with get,set
 
 type References () =
-    member val Include         : string         = "" with get,set
+    member val Framework       : string         = null with get,set
+    member val Library         : string         = null with get,set
+    member val Project         : string         = null with get,set
     member val Name            : string         = "" with get,set
     member val HintPath        : string         = "" with get,set
     member val Private         : Nullable<bool> = Nullable() with get,set
     member val SpecificVersion : Nullable<bool> = Nullable() with get,set
 
-type ProjectReferences () =
-    member val Include : string         = "" with get,set
-    member val Name    : string         = "" with get,set
-    member val Project : Guid           = Guid.Empty with get,set
-    member val Private : Nullable<bool> = Nullable() with get,set
+
 
 type TomlProject () =
     member val FsTomlVersion     : string               = "" with get, set
@@ -51,7 +49,6 @@ type TomlProject () =
     member val OtherFlags        : string []            = [||] with get, set
     member val Files             : File []              = [||] with get,set
     member val References        : References []        = [||] with get,set
-    member val ProjectReferences : ProjectReferences [] = [||] with get,set
 
 let parseDebugType = function
     | InvariantEqual Constants.None    -> Some DebugType.None
@@ -102,27 +99,28 @@ let toProjectSystem (proj : TomlProject) : FsTomlProject =
 
     let config = getConfig "" proj
 
-
-    let projRefs =
-        proj.ProjectReferences
-        |> Array.map (fun p ->
-            {
-                ProjectReference.Include = p.Include
-                Name                     = if p.Name = "" then None else Some p.Name
-                Guid                     = Some p.Project
-                CopyLocal                = p.Private |> Option.ofNullable |> Option.map (not)
-            }
-        )
-
     let refs =
         proj.References
+        |> Array.where (fun r -> isNull r.Project)
         |> Array.map (fun r ->
             {
-                Reference.Include = r.Include
+                Reference.Include = if isNull r.Framework then r.Library else r.Framework
                 HintPath          = if r.HintPath = "" then None else Some r.HintPath
                 Name              = if r.Name = "" then None else Some r.Name
                 SpecificVersion   = r.SpecificVersion |> Option.ofNullable
                 CopyLocal         = r.Private |> Option.ofNullable |> Option.map (not)
+            }
+        )
+
+    let projRefs =
+        proj.References
+        |> Array.where (fun r -> isNull r.Project |> not)
+        |> Array.map (fun p ->
+            {
+                ProjectReference.Include = p.Project
+                Name                     = if p.Name = "" then None else Some p.Name
+                Guid                     = None
+                CopyLocal                = p.Private |> Option.ofNullable |> Option.map (not)
             }
         )
 
