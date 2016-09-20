@@ -17,15 +17,12 @@ Files = [
 ]
 
 References = [
-    { Include = "System" },
-    { Include = "FSharp.Core", CopyLocal = 'Always' },
-    { Include = "Fable.Core", Private = true },
+    { Framework = "System" },
+    { Framework = "FSharp.Core", CopyLocal = 'Always' },
+    { Project   = "Deppy.fsproj" },
+    { Project   = "Deppy2.toml" },
+    { Library   = "lib/Fable.Core.dll", Private = true }
 ]
-
-ProjectReferences = [
-   { Name = 'Deppy', Project = "f3d0b372-3af7-49d9-98ed-5a78e9416098", Private = true },
-]
-
 
 DebugSymbols = true
 DebugType = 'full'
