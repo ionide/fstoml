@@ -148,11 +148,28 @@ let transformReference (tomlReference : Reference) =
     }
 
 let transformProjectReference (tomlProjectReference : ProjectReference) =
+    let name =
+        if tomlProjectReference.Name.IsNone then
+            System.IO.Path.GetFileName tomlProjectReference.Include |> Some
+        else
+            tomlProjectReference.Name
+
+    let guid =
+        if tomlProjectReference.Guid.IsNone then
+            let p = tomlProjectReference.Include |> System.IO.Path.GetFullPath
+            if System.IO.File.Exists p then
+                let proj = Forge.ProjectSystem.FsProject.load p
+                proj.Settings.ProjectGuid.Data
+            else
+                None
+        else
+            tomlProjectReference.Guid
+
     {
         Forge.ProjectSystem.ProjectReference.Include   = tomlProjectReference.Include
         Forge.ProjectSystem.ProjectReference.Condition = None
-        Forge.ProjectSystem.ProjectReference.Name      = tomlProjectReference.Name
-        Forge.ProjectSystem.ProjectReference.Guid      = tomlProjectReference.Guid
+        Forge.ProjectSystem.ProjectReference.Name      = name
+        Forge.ProjectSystem.ProjectReference.Guid      = guid
         Forge.ProjectSystem.ProjectReference.CopyLocal = tomlProjectReference.CopyLocal
     }
 
@@ -162,7 +179,7 @@ let transform (tomlProj : FsTomlProject ) : FsProject =
         ToolsVersion      = "14.0"
         DefaultTargets    = ["Build"]
         BuildConfigs      = tomlProj.Configurations |> Array.map transformBuildConfig |> Array.toList
-        ProjectReferences = tomlProj.ProjectReferences |> Array.map transformProjectReference |> ResizeArray
+        ProjectReferences = tomlProj.ProjectReferences |> Array.where (fun n -> n.Include.EndsWith ".fsproj" ) |> Array.map transformProjectReference |> ResizeArray
         References        = tomlProj.References |> Array.map transformReference |> ResizeArray
         SourceFiles       = tomlProj.Files |> Array.map transformSourceFile |> Array.toList |> SourceTree
         Settings          = transformSettings tomlProj
