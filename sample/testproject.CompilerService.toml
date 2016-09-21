@@ -22,7 +22,7 @@ References = [
     { Framework = "System.Xml.Linq" },
     { Library = "..\\packages\\FSharp.Compiler.Service\\lib\\net45\\FSharp.Compiler.Service.dll", Private=true},
     { Library = "..\\packages\\System.Collections.Immutable\\lib\\netstandard1.0\\System.Collections.Immutable.dll", Private=true},
-    { Library = "..\\packages\\System.Reflection.Metadata\\lib\\netstandard1.1\\System.Reflection.Metadata.dll", Private=true}
+    { Library = "..\\packages\\System.Reflection.Metadata\\lib\\netstandard1.1\\System.Reflection.Metadata.dll", Private=true},
     { Project = "..\src\FsToml\FsToml.fsproj" }
 ]
 
