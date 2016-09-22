@@ -9,7 +9,7 @@ System.IO.Directory.SetCurrentDirectory __SOURCE_DIRECTORY__
 
 
 let t = FsToml.Parser.parse "testproject.toml"
-let p = FsToml.Transform.Fsproj.transform t
+let (p, references) = FsToml.Transform.Fsproj.transform t
 let f = p.ToXmlString()
 f
 
