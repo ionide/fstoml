@@ -15,18 +15,15 @@ Files = [
 ]
 
 References = [
-    { Include = "System" },
-    { Include = "System.Core" },
-    { Include = "System.Numerics" },
-    { Include = "System.Xml" },
-    { Include = "System.Xml.Linq" },
-    { Include = "..\\packages\\FSharp.Compiler.Service\\lib\\net45\\FSharp.Compiler.Service.dll", Private=true},
-    { Include = "..\\packages\\System.Collections.Immutable\\lib\\netstandard1.0\\System.Collections.Immutable.dll", Private=true},
-    { Include = "..\\packages\\System.Reflection.Metadata\\lib\\netstandard1.1\\System.Reflection.Metadata.dll", Private=true}
-]
-
-ProjectReferences = [
-    { Name = 'FsToml.fsproj', Include = '..\src\FsToml\FsToml.fsproj',  Project = "8a5d713d-7ada-4c22-ab94-6ba8345a644b" },
+    { Framework = "System" },
+    { Framework = "System.Core" },
+    { Framework = "System.Numerics" },
+    { Framework = "System.Xml" },
+    { Framework = "System.Xml.Linq" },
+    { Library = "..\\packages\\FSharp.Compiler.Service\\lib\\net45\\FSharp.Compiler.Service.dll", Private=true},
+    { Library = "..\\packages\\System.Collections.Immutable\\lib\\netstandard1.0\\System.Collections.Immutable.dll", Private=true},
+    { Library = "..\\packages\\System.Reflection.Metadata\\lib\\netstandard1.1\\System.Reflection.Metadata.dll", Private=true},
+    { Project = "..\src\FsToml\FsToml.fsproj" }
 ]
 
 # configurations

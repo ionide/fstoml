@@ -49,15 +49,14 @@ f
 //   <ItemGroup>
 //     <Reference Include="System" />
 //     <Reference Include="FSharp.Core" />
-//     <Reference Include="Fable.Core">
+//     <Reference Include="lib/Fable.Core.dll">
 //       <Private>False</Private>
 //     </Reference>
 //   </ItemGroup>
 //   <ItemGroup>
-//     <ProjectReference Include="">
-//       <Name>Deppy</Name>
-//       <Project>{f3d0b372-3af7-49d9-98ed-5a78e9416098}</Project>
-//       <Private>False</Private>
+//     <ProjectReference Include="Deppy.fsproj">
+//       <Name>Deppy.fsproj</Name>
+//       <Project>{8a5d713d-7ada-4c22-ab94-6ba8345a644b}</Project>
 //     </ProjectReference>
 //   </ItemGroup>
 //   <ItemGroup>
@@ -69,4 +68,4 @@ f
 //     <Compile Include="src/file3.fs" />
 //     <None Include="src/script.fsx" />
 //   </ItemGroup>
-// </Project>"
+// </Project>
