@@ -1,21 +1,30 @@
 FRAMEWORK: >= NET45
 NUGET
   remote: https://www.nuget.org/api/v2
+    Chessie (0.6)
+      FSharp.Core
     FSharp.Compiler.Service (6.0.2)
       System.Collections.Immutable (>= 1.2)
       System.Reflection.Metadata (>= 1.4.1-beta-24227-04)
     FSharp.Compiler.Service.ProjectCracker (6.0.2)
     FSharp.Core (4.0.0.1) - redirects: force
+    Mono.Cecil (0.9.6.4)
     Nett (0.5)
+    Newtonsoft.Json (9.0.1)
+    Paket.Core (3.19.6)
+      Chessie
+      FSharp.Core
+      Mono.Cecil
+      Newtonsoft.Json
     System.Collections.Immutable (1.2)
     System.Reflection.Metadata (1.4.1-beta-24227-04)
       System.Collections.Immutable (>= 1.2)
 GIT
   remote: https://github.com/fsprojects/Forge.git
-     (427145a173bb701acb9249b1500b5fdced6d4bd1)
+     (6a9466102b2fbc0ad606617bfa371aec92e595ad)
       build: build.cmd BuildProjectSystem
       os: Windows
-     (427145a173bb701acb9249b1500b5fdced6d4bd1)
+     (6a9466102b2fbc0ad606617bfa371aec92e595ad)
       build: build.sh BuildProjectSystem
       os: mono
 GROUP Build
