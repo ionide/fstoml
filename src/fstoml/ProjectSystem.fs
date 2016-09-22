@@ -159,6 +159,7 @@ type Reference = {
     Name            : string option
     SpecificVersion : bool option
     CopyLocal       : bool option
+    IsPackage       : bool
 }
 
 type ProjectReference = {

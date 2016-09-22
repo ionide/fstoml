@@ -96,28 +96,35 @@ module References =
 
     let getPathToReference (target : Target.Target) (reference : Reference) : string[] =
         let ver = target.FrameworkVersion.ToString()
-
         if Path.IsPathRooted reference.Include then
-
-
-            [| yield reference.Include; if dependsOnFacade reference.Include then yield! getFacade ver  |]
+            [| yield reference.Include;  |]
         elif File.Exists reference.Include then
             let p = Path.GetFullPath reference.Include
-            [| yield p; if dependsOnFacade p then yield! getFacade ver |]
+            [| yield p; |]
         else
             [| sysLib ver reference.Include |]
 
-    let getCompilerParams target fsharpCore (refs : Reference[]) =
+    let getCompilerParams (target : Target.Target) fsharpCore (refs : Reference[]) =
+        let ver = target.FrameworkVersion.ToString()
         let references =
             refs
+            |> Array.where (fun n -> n.IsPackage |> not)
             |> Array.map (getPathToReference target)
             |> Array.collect id
             |> Array.filter (fun r -> r.Contains "FSharp.Core" |> not && r.Contains "mscorlib" |> not)
             |> Array.distinct
+        let packages =
+            refs
+            |> Array.where (fun n -> n.IsPackage)
+            |> Array.map(fun n -> n.Include |> Package.getAssemblies target)
+            |> Array.collect id
+        let allRefs = Array.concat [references; packages]
+        let allRefs = if allRefs |> Array.exists dependsOnFacade then Array.concat [allRefs; getFacade ver] else allRefs
+
         [|
             yield "-r:" + (sysLib  (target.FrameworkVersion.ToString()) "mscorlib")
             yield "-r:" + (fsCore fsharpCore)
-            for r in references do
+            for r in allRefs do
                 yield "-r:" + r
         |]
 
@@ -151,13 +158,15 @@ module Files =
         |> Array.filter(fun r -> r.OnBuild = BuildAction.Compile)
         |> Array.map(fun r -> r.Link |> Option.fold (fun s e -> e) r.Include)
 
-let getCompilerParams (target : Target.Target) (project : FsTomlProject) =
-
+let getCompilerParams (target : Target.Target) ((path,project) : string * FsTomlProject) =
+    let p = System.IO.Directory.GetCurrentDirectory ()
+    System.IO.Directory.SetCurrentDirectory(System.IO.Path.GetDirectoryName path)
     let name = getName project
     let cfg = project.Configurations |> Target.getConfig target |> Configuration.getCompilerParams target name
     let refs = project.References |> References.getCompilerParams target (project.FSharpCore.ToString())
     let files = project.Files |> Files.getCompilerParams
     let projRefs = project.ProjectReferences |> ProjectReferences.getCompilerParams target
+    System.IO.Directory.SetCurrentDirectory p
 
     [|
         yield "--noframework"
@@ -174,8 +183,8 @@ let getCompilerParams (target : Target.Target) (project : FsTomlProject) =
     |]
 
 
-let getFSharpProjectOptions  (target : Target.Target) (project : FsTomlProject) =
-    let parms = getCompilerParams target project
+let getFSharpProjectOptions  (target : Target.Target) ((path,project) : string * FsTomlProject) =
+    let parms = getCompilerParams target (path,project)
     let checker = FSharpChecker.Instance
     checker.GetProjectOptionsFromCommandLineArgs (project.Name, parms)
 
