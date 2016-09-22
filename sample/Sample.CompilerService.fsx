@@ -1,5 +1,10 @@
 System.IO.Directory.SetCurrentDirectory __SOURCE_DIRECTORY__
 
+#r "../bin/FsToml.CompilerService/Chessie.dll"
+#r "../bin/FsToml.CompilerService/Newtonsoft.Json.dll"
+#r "../bin/FsToml.CompilerService/Paket.Core.dll"
+#r "../bin/FsToml.CompilerService/System.Collections.Immutable.dll"
+#r "../bin/FsToml.CompilerService/System.Reflection.Metadata.dll"
 #r "../bin/FsToml.CompilerService/Nett.dll"
 #r "../bin/FsToml.CompilerService/FSharp.Compiler.Service.dll"
 #r "../bin/FsToml.CompilerService/FSharp.Compiler.Service.ProjectCracker.dll"
@@ -19,17 +24,17 @@ let target = {
     PlatformType = PlatformType.AnyCPU
     BuildType = BuildType.Release  }
 
+let path = System.IO.Path.GetFullPath "testproject.CompielrService.toml"
 let t = FsToml.Parser.parse "testproject.CompilerService.toml"
-let p = FsToml.Transform.CompilerService.getCompilerParams target t
+let p = FsToml.Transform.CompilerService.getCompilerParams target (path, t)
 p
 
-ProjectCracker.GetProjectOptionsFromProjectFile("..\src\FsToml\FsToml.fsproj")
 
 // [|"--noframework"; "--fullpaths"; "--flaterrors"; "--subsystemversion:6.00";
 //     "--highentropyva+"; "--target:Library"; "--tailcalls+"; "--warnaserror-";
 //     "-d:TRACE"; "--debug:pdbonly"; "--optimize+"; "--platofrm:AnyCPU";
-//     "--warn:3"; "--out:bin\\\\Release\\FsToml.CompilerService.dll";
-//     "--doc:bin\\\\Release\\FsToml.CompilerService.dll.xml";
+//     "--warn:3"; "--out:bin\\Release\\FsToml.CompilerService.dll";
+//     "--doc:bin\\Release\\FsToml.CompilerService.dll.xml";
 //     "-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5\\mscorlib.dll";
 //     "-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\FSharp\\.NETFramework\\v4.0\\4.4.0.0\\FSharp.Core.dll";
 //     "-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5\\System.dll";
@@ -38,6 +43,8 @@ ProjectCracker.GetProjectOptionsFromProjectFile("..\src\FsToml\FsToml.fsproj")
 //     "-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5\\System.Xml.dll";
 //     "-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5\\System.Xml.Linq.dll";
 //     "-r:d:\\Programowanie\\Projekty\\fstoml\\packages\\FSharp.Compiler.Service\\lib\\net45\\FSharp.Compiler.Service.dll";
+//     "-r:d:\\Programowanie\\Projekty\\fstoml\\packages\\FSharp.Compiler.Service.ProjectCracker\\lib\\net45\\FSharp.Compiler.Service.ProjectCracker.dll";
+//     "-r:d:\\Programowanie\\Projekty\\fstoml\\packages\\Paket.Core\\lib\\net45\\Paket.Core.dll";
 //     "-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5\\Facades\\System.Collections.Concurrent.dll";
 //     "-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5\\Facades\\System.Collections.dll";
 //     "-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5\\Facades\\System.ComponentModel.Annotations.dll";
@@ -88,6 +95,5 @@ ProjectCracker.GetProjectOptionsFromProjectFile("..\src\FsToml\FsToml.fsproj")
 //     "-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5\\Facades\\System.Xml.ReaderWriter.dll";
 //     "-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5\\Facades\\System.Xml.XDocument.dll";
 //     "-r:C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5\\Facades\\System.Xml.XmlSerializer.dll";
-//     "-r:d:\\Programowanie\\Projekty\\fstoml\\packages\\System.Collections.Immutable\\lib\\netstandard1.0\\System.Collections.Immutable.dll";
-//     "-r:d:\\Programowanie\\Projekty\\fstoml\\packages\\System.Reflection.Metadata\\lib\\netstandard1.1\\System.Reflection.Metadata.dll";
+//     "-r:d:\\Programowanie\\Projekty\\fstoml\\src\\FsToml\\bin\\Release\\FsToml.dll";
 //     "Transform.fs"; "AssemblyInfo.fs"|]

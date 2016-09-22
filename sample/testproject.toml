@@ -20,8 +20,8 @@ References = [
     { Framework = "System" },
     { Framework = "FSharp.Core", CopyLocal = 'Always' },
     { Project   = "Deppy.fsproj" },
-    { Project   = "Deppy2.toml" },
-    { Library   = "lib/Fable.Core.dll", Private = true }
+    { Library   = "lib/Fable.Core.dll", Private = true },
+    { Package   = "Nett" }
 ]
 
 DebugSymbols = true
