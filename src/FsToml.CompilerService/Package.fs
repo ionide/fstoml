@@ -4,6 +4,7 @@ open System.IO
 open FsToml.Prelude
 open FsToml.ProjectSystem
 open FsToml.Target
+open Paket.Domain
 
 
 let rec findDependencyFile folder =
@@ -62,7 +63,19 @@ let getAssemblies (target : Target) (name : string) =
 
                 Paket.FrameworkIdentifier.DotNetStandard version
 
+        let deps = lockFile.GetAllDependenciesOf (GroupName "main", PackageName name)
+        deps.Add (PackageName name) |> ignore
 
 
-        dependenciesFile.GetLibraries( (None, name), frmwrk)
-        |> Array.ofSeq
+        deps
+        |> Seq.collect (fun n ->
+            let a = dependenciesFile.GetInstalledPackageModel (Some "main", n.GetCompareString())
+            let dlls =
+                Paket.LoadingScripts.PackageAndAssemblyResolution.getDllsWithinPackage frmwrk a
+                |> List.map (fun f -> f.FullName)
+            let asmbls = Paket.LoadingScripts.PackageAndAssemblyResolution.getFrameworkReferencesWithinPackage a
+            List.concat [dlls; asmbls]
+        )
+        |> Seq.toArray
+
+

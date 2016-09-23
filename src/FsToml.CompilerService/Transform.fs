@@ -90,9 +90,13 @@ module References =
         |> Array.exists (fun an -> an.Name.Contains "System.Runtime")
 
     let getFacade ver =
-        Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) +
-        @"\Reference Assemblies\Microsoft\Framework\.NETFramework\" + ver + "\\Facades\\"
-        |> Directory.GetFiles
+        if System.Environment.OSVersion.Platform = System.PlatformID.Win32NT then
+             // file references only valid on Windows
+            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) +
+            @"\Reference Assemblies\Microsoft\Framework\.NETFramework\" + ver + "\\Facades\\"
+            |> Directory.GetFiles
+        else
+            [||]
 
     let getPathToReference (target : Target.Target) (reference : Reference) : string[] =
         let ver = target.FrameworkVersion.ToString()
@@ -118,12 +122,16 @@ module References =
             |> Array.where (fun n -> n.IsPackage)
             |> Array.map(fun n -> n.Include |> Package.getAssemblies target)
             |> Array.collect id
+            |> Array.map(fun n -> if Path.IsPathRooted n then n else sysLib ver n)
         let allRefs = Array.concat [references; packages]
         let allRefs = if allRefs |> Array.exists dependsOnFacade then Array.concat [allRefs; getFacade ver] else allRefs
+        let allRefs = allRefs |> Array.distinctBy Path.GetFileName
+        let hasFSharpCore = packages |> Array.exists (fun n -> n.EndsWith "FSharp.Core.dll")
+
 
         [|
-            yield "-r:" + (sysLib  (target.FrameworkVersion.ToString()) "mscorlib")
-            yield "-r:" + (fsCore fsharpCore)
+            yield "-r:" + (sysLib  ver "mscorlib")
+            if hasFSharpCore |> not then yield "-r:" + (fsCore fsharpCore)
             for r in allRefs do
                 yield "-r:" + r
         |]
