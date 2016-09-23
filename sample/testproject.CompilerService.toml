@@ -22,8 +22,7 @@ References = [
     { Framework = "System.Xml.Linq" },
     { Package = "FSharp.Compiler.Service" },
     { Package = "FSharp.Compiler.Service.ProjectCracker" },
-    { Package = "Paket.Core" },
-    { Project = "..\\src\\FsToml\\FsToml.fsproj" }
+    { Package = "Paket.Core" }
 ]
 
 # configurations

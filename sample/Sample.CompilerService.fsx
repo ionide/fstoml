@@ -1,15 +1,20 @@
-System.IO.Directory.SetCurrentDirectory __SOURCE_DIRECTORY__
+// System.IO.Directory.SetCurrentDirectory __SOURCE_DIRECTORY__
 
-#r "../bin/FsToml.CompilerService/Chessie.dll"
-#r "../bin/FsToml.CompilerService/Newtonsoft.Json.dll"
-#r "../bin/FsToml.CompilerService/Paket.Core.dll"
-#r "../bin/FsToml.CompilerService/System.Collections.Immutable.dll"
-#r "../bin/FsToml.CompilerService/System.Reflection.Metadata.dll"
-#r "../bin/FsToml.CompilerService/Nett.dll"
-#r "../bin/FsToml.CompilerService/FSharp.Compiler.Service.dll"
-#r "../bin/FsToml.CompilerService/FSharp.Compiler.Service.ProjectCracker.dll"
-#r "../bin/FsToml.CompilerService/FsToml.dll"
-#r "../bin/FsToml.CompilerService/FsToml.CompilerService.dll"
+#I "../bin/FsToml.CompilerService"
+#r "Chessie.dll"
+#r "Mono.Cecil.dll"
+#r "Mono.Cecil.Rocks.dll"
+#r "Mono.Cecil.Pdb.dll"
+#r "Mono.Cecil.Mdb.dll"
+#r "Newtonsoft.Json.dll"
+#r "Paket.Core.dll"
+#r "System.Collections.Immutable.dll"
+#r "System.Reflection.Metadata.dll"
+#r "Nett.dll"
+#r "FSharp.Compiler.Service.dll"
+#r "FSharp.Compiler.Service.ProjectCracker.dll"
+#r "FsToml.dll"
+#r "FsToml.CompilerService.dll"
 #r "System.Xml"
 #r "System.Xml.Linq"
 
@@ -24,10 +29,10 @@ let target = {
     PlatformType = PlatformType.AnyCPU
     BuildType = BuildType.Release  }
 
-let path = System.IO.Path.GetFullPath "testproject.CompielrService.toml"
-let t = FsToml.Parser.parse "testproject.CompilerService.toml"
+let path = System.IO.Path.Combine (__SOURCE_DIRECTORY__, "testproject.CompilerService.toml")
+let t = FsToml.Parser.parse path
 let p = FsToml.Transform.CompilerService.getCompilerParams target (path, t)
-p
+printf "%A" p
 
 
 // [|"--noframework"; "--fullpaths"; "--flaterrors"; "--subsystemversion:6.00";
