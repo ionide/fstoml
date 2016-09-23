@@ -96,7 +96,9 @@ module References =
             @"\Reference Assemblies\Microsoft\Framework\.NETFramework\" + ver + "\\Facades\\"
             |> Directory.GetFiles
         else
-            [||]
+            let sysDir = System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory()
+            let apiDir = sysDir + "-api/Facades/"
+            apiDir |> Directory.GetFiles
 
     let getPathToReference (target : Target.Target) (reference : Reference) : string[] =
         let ver = target.FrameworkVersion.ToString()
