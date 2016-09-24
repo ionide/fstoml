@@ -63,13 +63,13 @@ let getAssemblies (target : Target) (name : string) =
 
                 Paket.FrameworkIdentifier.DotNetStandard version
 
-        let deps = lockFile.GetAllDependenciesOf (GroupName "main", PackageName name)
+        let deps = lockFile.GetAllDependenciesOf (GroupName "Main", PackageName name)
         deps.Add (PackageName name) |> ignore
 
 
         deps
         |> Seq.collect (fun n ->
-            let a = dependenciesFile.GetInstalledPackageModel (Some "main", n.GetCompareString())
+            let a = dependenciesFile.GetInstalledPackageModel (Some "Main", n.ToString())            
             let dlls =
                 Paket.LoadingScripts.PackageAndAssemblyResolution.getDllsWithinPackage frmwrk a
                 |> List.map (fun f -> f.FullName)

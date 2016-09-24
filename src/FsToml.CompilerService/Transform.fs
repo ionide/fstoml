@@ -97,7 +97,7 @@ module References =
             |> Directory.GetFiles
         else
             let sysDir = System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory()
-            let apiDir = sysDir + "-api/Facades/"
+            let apiDir = if Directory.Exists (sysDir + "/Facades/") then sysDir + "/Facades/" else sysDir + "-api/Facades/"
             apiDir |> Directory.GetFiles
 
     let getPathToReference (target : Target.Target) (reference : Reference) : string[] =
