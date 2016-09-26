@@ -20,6 +20,7 @@ type References () =
     member val Framework       : string         = null with get,set
     member val Library         : string         = null with get,set
     member val Project         : string         = null with get,set
+    member val Package         : string         = null with get,set
     member val Name            : string         = "" with get,set
     member val HintPath        : string         = "" with get,set
     member val Private         : Nullable<bool> = Nullable() with get,set
@@ -89,6 +90,8 @@ let getConfig condition (proj : TomlProject) =
     }
 
 let toProjectSystem (proj : TomlProject) : FsTomlProject =
+    let isNotNull = isNull >> not
+
     let version =
         let t = proj.FsTomlVersion.Split('.')
         SemVer (int t.[0], int t.[1], int t.[2])
@@ -103,12 +106,18 @@ let toProjectSystem (proj : TomlProject) : FsTomlProject =
         proj.References
         |> Array.where (fun r -> isNull r.Project)
         |> Array.map (fun r ->
+            let incl =
+                if isNotNull r.Framework then r.Framework
+                elif isNotNull r.Library then r.Library
+                else r.Package
+
             {
-                Reference.Include = if isNull r.Framework then r.Library else r.Framework
+                Reference.Include = incl
                 HintPath          = if r.HintPath = "" then None else Some r.HintPath
                 Name              = if r.Name = "" then None else Some r.Name
                 SpecificVersion   = r.SpecificVersion |> Option.ofNullable
                 CopyLocal         = r.Private |> Option.ofNullable |> Option.map (not)
+                IsPackage         = isNotNull r.Package
             }
         )
 
@@ -125,7 +134,6 @@ let toProjectSystem (proj : TomlProject) : FsTomlProject =
         )
 
     let files =
-        let isNotNull = isNull >> not
 
         proj.Files
         |> Array.map (fun f ->

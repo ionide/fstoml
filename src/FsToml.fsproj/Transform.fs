@@ -174,13 +174,13 @@ let transformProjectReference (tomlProjectReference : ProjectReference) =
     }
 
 
-let transform (tomlProj : FsTomlProject ) : FsProject =
+let transform (tomlProj : FsTomlProject ) : (FsProject * string list) =
     {
         ToolsVersion      = "14.0"
         DefaultTargets    = ["Build"]
         BuildConfigs      = tomlProj.Configurations |> Array.map transformBuildConfig |> Array.toList
         ProjectReferences = tomlProj.ProjectReferences |> Array.where (fun n -> n.Include.EndsWith ".fsproj" ) |> Array.map transformProjectReference |> ResizeArray
-        References        = tomlProj.References |> Array.map transformReference |> ResizeArray
+        References        = tomlProj.References |> Array.where (fun n -> n.IsPackage |> not) |> Array.map transformReference |> ResizeArray
         SourceFiles       = tomlProj.Files |> Array.map transformSourceFile |> Array.toList |> SourceTree
         Settings          = transformSettings tomlProj
-    }
+    }, tomlProj.References |> Seq.where (fun n -> n.IsPackage) |> Seq.map (fun n -> n.Include) |> Seq.toList
