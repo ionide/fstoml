@@ -2,7 +2,9 @@ module FsToml.Transform.CompilerService
 
 open FsToml
 open FsToml.ProjectSystem
+open Microsoft.FSharp.Compiler
 open Microsoft.FSharp.Compiler.SourceCodeServices
+open Microsoft.FSharp.Compiler.SimpleSourceCodeServices
 
 let getName project =
     project.AssemblyName +
@@ -200,6 +202,8 @@ let getFSharpProjectOptions  (target : Target.Target) ((path,project) : string *
     let parms = getCompilerParams target (path,project)
     let checker = FSharpChecker.Instance
     checker.GetProjectOptionsFromCommandLineArgs (project.Name, parms)
+
+let compile (target : Target.Target) ((path,project) : string * FsTomlProject) =
 
 
 
