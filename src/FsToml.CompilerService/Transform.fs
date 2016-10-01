@@ -40,7 +40,7 @@ module Configuration =
         [|
             yield "--tailcalls" + if cfg.Tailcalls |> Option.exists id then "+" else "-"
             yield "--warnaserror" + if cfg.WarningsAsErrors |> Option.exists id then "+" else "-"
-
+            if target.FrameworkTarget = FrameworkTarget.NetcoreApp then yield "--targetprofile:netcore"
             if cfg.Constants.IsSome then
                 for c in cfg.Constants.Value do
                     yield "-d:" + c
