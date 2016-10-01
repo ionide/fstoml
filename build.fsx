@@ -408,4 +408,4 @@ Target "All" DoNothing
 "ReleaseDocs"
   ==> "Release"
 
-RunTargetOrDefault "All"
+RunTargetOrDefault "RunTests"
