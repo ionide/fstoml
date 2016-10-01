@@ -114,6 +114,7 @@ module References =
 
     let getCompilerParams (target : Target.Target) fsharpCore (refs : Reference[]) =
         let ver = target.FrameworkVersion.ToString()
+        let isFullFramework = target.FrameworkTarget = FrameworkTarget.Net
         let references =
             refs
             |> Array.where (fun n -> n.IsPackage |> not)
@@ -128,10 +129,9 @@ module References =
             |> Array.collect id
             |> Array.map(fun n -> if Path.IsPathRooted n then n else sysLib ver n)
         let allRefs = Array.concat [references; packages]
-        let allRefs = if allRefs |> Array.exists dependsOnFacade then Array.concat [allRefs; getFacade ver] else allRefs
+        let allRefs = if allRefs |> Array.exists (fun n -> isFullFramework && dependsOnFacade n) then Array.concat [allRefs; getFacade ver] else allRefs
         let allRefs = allRefs |> Array.distinctBy Path.GetFileName
         let hasFSharpCore = packages |> Array.exists (fun n -> n.EndsWith "FSharp.Core.dll")
-        let isFullFramework = target.FrameworkTarget = FrameworkTarget.Net
 
 
         [|
