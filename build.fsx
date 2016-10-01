@@ -165,7 +165,7 @@ Target "RunIntegrationTests" (fun _ ->
             proc.FileName <- cli) TimeSpan.MaxValue
         if res then
             let dir = Path.GetDirectoryName p
-            let exe = dir </> "bin" </> "Tets.exe"
+            let exe = dir </> "bin" </> "Test.exe"
 
             let res = execProcess (fun proc -> proc.FileName <- exe) TimeSpan.MaxValue
             if res |> not then failwith "Test faield"
