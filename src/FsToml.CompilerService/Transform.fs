@@ -129,11 +129,12 @@ module References =
         let allRefs = if allRefs |> Array.exists dependsOnFacade then Array.concat [allRefs; getFacade ver] else allRefs
         let allRefs = allRefs |> Array.distinctBy Path.GetFileName
         let hasFSharpCore = packages |> Array.exists (fun n -> n.EndsWith "FSharp.Core.dll")
+        let isFullFramework = target.FrameworkTarget = FrameworkTarget.Net
 
 
         [|
-            yield "-r:" + (sysLib  ver "mscorlib")
-            if hasFSharpCore |> not then yield "-r:" + (fsCore fsharpCore)
+            if isFullFramework then yield "-r:" + (sysLib  ver "mscorlib")
+            if hasFSharpCore |> not && isFullFramework then yield "-r:" + (fsCore fsharpCore)
             for r in allRefs do
                 yield "-r:" + r
         |]
