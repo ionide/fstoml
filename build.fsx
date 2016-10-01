@@ -153,6 +153,29 @@ Target "RunTests" (fun _ ->
             OutputDir  = "TestResults.xml" })
 )
 
+
+Target "RunIntegrationTests" (fun _ ->
+    let cli = "bin/FsToml.CLI/FsToml.CLI.exe"
+
+    !! "tests/FsToml.IntegrationTests/**/project.fstoml"
+    |> Seq.iter (fun p ->
+        printfn "Testing: %s" p
+        let res = execProcess (fun proc ->
+            proc.Arguments <- "compile " + p
+            proc.FileName <- cli) TimeSpan.MaxValue
+        if res then
+            let dir = Path.GetDirectoryName p
+            let exe = dir </> "bin" </> "Tets.exe"
+
+            let res = execProcess (fun proc -> proc.FileName <- exe) TimeSpan.MaxValue
+            if res |> not then failwith "Test faield"
+        else
+            failwith "Build Failed"
+
+    )
+)
+
+
 #if MONO
 #else
 // --------------------------------------------------------------------------------------
@@ -379,6 +402,7 @@ Target "All" DoNothing
   ==> "Build"
   ==> "CopyBinaries"
   ==> "RunTests"
+  ==> "RunIntegrationTests"
   ==> "GenerateReferenceDocs"
   ==> "GenerateDocs"
 #if MONO
@@ -408,4 +432,4 @@ Target "All" DoNothing
 "ReleaseDocs"
   ==> "Release"
 
-RunTargetOrDefault "RunTests"
+RunTargetOrDefault "RunIntegrationTests"

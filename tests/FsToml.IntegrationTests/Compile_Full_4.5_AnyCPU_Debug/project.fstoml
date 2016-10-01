@@ -1,0 +1,18 @@
+FsTomlVersion   = '0.0.1'
+Name            = 'Test'
+AssemblyName    = 'Test'
+RootNamespace   = 'Test'
+Guid            = 'bb0c6f01-5e57-4575-a498-5de850d9fa6c'
+OutputType      = 'Exe'
+FSharpCore      = '4.4.0.0'
+
+Files = [
+    { Compile = "test.fs" },
+]
+
+References = [
+    { Framework = "System" },
+    { Package   = "FSharp.Core" }
+]
+
+OutputPath = 'bin'

@@ -22,6 +22,8 @@ module Commands =
         with
         | ex ->
             printfn "Fatal error: %s" ex.Message
+            printfn "Trace: %s" ex.StackTrace
+            printfn "Data: %A" ex.Data
 
     let fsproj path =
         try
@@ -101,7 +103,7 @@ module Arguments =
         let proj = pr.GetResult <@ CompileArgs.Proj @>
 
         let target =
-            match pr.GetResult <@ CompileArgs.Framework @> with
+            match pr.TryGetResult <@ CompileArgs.Framework @> |> Option.bind id with
             | None | Some Full -> FrameworkTarget.Net
             | Some Netcore -> FrameworkTarget.NetcoreApp
 
@@ -109,7 +111,7 @@ module Arguments =
             match target with
             | FrameworkTarget.NetcoreApp -> FrameworkVersion.V1_0
             | _ ->
-                match pr.GetResult <@ CompileArgs.Version @> with
+                match pr.TryGetResult <@ CompileArgs.Version @> |> Option.bind id with
                 | None -> FrameworkVersion.V4_5
                 | Some ``4.5`` -> FrameworkVersion.V4_5
                 | Some ``4.5.1`` -> FrameworkVersion.V4_5_1
@@ -118,12 +120,12 @@ module Arguments =
                 | Some ``4.6.2`` -> FrameworkVersion.V4_6_2
 
         let bld =
-            match pr.GetResult <@ CompileArgs.Build @> with
+            match pr.TryGetResult <@ CompileArgs.Build @> |> Option.bind id with
             | None | Some Debug -> BuildType.Debug
             | Some Release -> BuildType.Release
 
         let plt =
-            match pr.GetResult <@ CompileArgs.Platform @> with
+            match pr.TryGetResult <@ CompileArgs.Platform @> |> Option.bind id with
             | None | Some AnyCPU -> PlatformType.AnyCPU
             | Some X64 -> PlatformType.X64
             | Some X86 -> PlatformType.X86
