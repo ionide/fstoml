@@ -16,10 +16,10 @@ let getName project =
 module Configuration =
     open System.IO
 
-    let getOutputPath cfg name =
-         defaultArg (cfg.OutputPath |> Option.map (fun p -> Path.Combine(p,name))) (Path.Combine("bin", name))
+    let getOutputPath cfg dir name =
+         defaultArg (cfg.OutputPath |> Option.map (fun p -> Path.Combine(dir, p,name))) (Path.Combine(dir, "bin", name))
 
-    let getCompilerParams (target : Target.Target) (name : string) (cfg : Configuration) =
+    let getCompilerParams (target : Target.Target) (dir : string) (name : string) (cfg : Configuration) =
 
         let debug =
             if cfg.DebugSymbols |> Option.exists id then ":full"
@@ -34,9 +34,9 @@ module Configuration =
             if target.PlatformType = PlatformType.AnyCPU && cfg.Prefer32bit |> Option.exists id then
                 "anycpu32bitpreferred"
             else
-                target.PlatformType.ToString()
+                target.PlatformType.ToString().ToLower()
 
-        let outPath = getOutputPath cfg name
+        let outPath = getOutputPath cfg dir name
         let xmlPath = defaultArg cfg.DocumentationFile (outPath + ".xml")
 
         [|
@@ -48,10 +48,10 @@ module Configuration =
                     yield "-d:" + c
             yield "--debug" + debug
             yield "--optimize" + if cfg.Optimize |> Option.exists id then "+" else "-"
-            yield "--platofrm:" + platofrm
+            yield "--platform:" + platofrm
             yield "--warn:" + string (defaultArg cfg.WarningLevel 3)
             yield "--out:" + outPath
-            yield "--doc:" + xmlPath
+            // yield "--doc:" + xmlPath
             match cfg.NoWarn with
             | None | Some [||] -> ()
             | Some nowarns -> yield "--nowarn:" + (nowarns |> Seq.map (string) |> String.concat ",")
@@ -148,10 +148,11 @@ module ProjectReferences =
 
     let getTomlReference (target : Target.Target) (reference : ProjectReference) =
         let path = reference.Include |> Path.GetFullPath
+        let dir = Path.GetDirectoryName path
         let proj = FsToml.Parser.parse path
         let config = proj.Configurations |> Target.getConfig target
         let name = getName proj
-        Path.Combine(path |> Path.GetDirectoryName, Configuration.getOutputPath config name)
+        Path.Combine(path |> Path.GetDirectoryName, Configuration.getOutputPath config dir name)
 
     let getFsprojReference (target : Target.Target) (reference : ProjectReference) =
         let path = reference.Include |> Path.GetFullPath
@@ -175,17 +176,18 @@ module Files =
 
 let getCompilerParams (target : Target.Target) ((path,project) : string * FsTomlProject) =
     let p = System.IO.Directory.GetCurrentDirectory ()
-    System.IO.Directory.SetCurrentDirectory(System.IO.Path.GetDirectoryName path)
+    let dir = System.IO.Path.GetDirectoryName path
+    System.IO.Directory.SetCurrentDirectory(dir)
     let name = getName project
-    let cfg = project.Configurations |> Target.getConfig target |> Configuration.getCompilerParams target name
+    let cfg = project.Configurations |> Target.getConfig target |> Configuration.getCompilerParams target dir name
     let refs = project.References |> References.getCompilerParams target (project.FSharpCore.ToString())
-    let files = project.Files |> Files.getCompilerParams
+    let files = project.Files |> Files.getCompilerParams |> Array.map (fun n -> dir </> n)
     let projRefs = project.ProjectReferences |> ProjectReferences.getCompilerParams target
     System.IO.Directory.SetCurrentDirectory p
 
     [|
-        yield "--noframework"
         yield "--fullpaths"
+        yield "--noframework"
         yield "--flaterrors"
         yield "--subsystemversion:6.00"
         yield "--highentropyva+"
@@ -203,7 +205,10 @@ let getFSharpProjectOptions  (target : Target.Target) ((path,project) : string *
 
 let compile (target : Target.Target) ((path,project) : string * FsTomlProject) =
      let scs = SimpleSourceCodeServices()
-     getCompilerParams target (path, project) |> scs.Compile
+     let prms = getCompilerParams target (path, project)
+     printfn "Compieler parameters:"
+     printfn "%A" prms
+     prms |> scs.Compile
 
 
 

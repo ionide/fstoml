@@ -2,7 +2,7 @@
 namespace System
 open System.Reflection
 
-[<assembly: AssemblyTitleAttribute("FsToml.CompilerService")>]
+[<assembly: AssemblyTitleAttribute("FsToml.CLI")>]
 [<assembly: AssemblyProductAttribute("fstoml")>]
 [<assembly: AssemblyDescriptionAttribute("TOML based F# Project System")>]
 [<assembly: AssemblyVersionAttribute("1.0")>]
