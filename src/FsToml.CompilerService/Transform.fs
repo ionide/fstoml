@@ -194,9 +194,7 @@ let getCompilerParams (target : Target.Target) ((path,project) : string * FsToml
         yield! refs
         yield! projRefs
         yield! files
-
     |]
-
 
 let getFSharpProjectOptions  (target : Target.Target) ((path,project) : string * FsTomlProject) =
     let parms = getCompilerParams target (path,project)
@@ -204,7 +202,8 @@ let getFSharpProjectOptions  (target : Target.Target) ((path,project) : string *
     checker.GetProjectOptionsFromCommandLineArgs (project.Name, parms)
 
 let compile (target : Target.Target) ((path,project) : string * FsTomlProject) =
-
+     let scs = SimpleSourceCodeServices()
+     getCompilerParams target (path, project) |> scs.Compile
 
 
 
