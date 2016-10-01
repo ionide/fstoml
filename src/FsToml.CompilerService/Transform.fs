@@ -107,8 +107,10 @@ module References =
         elif File.Exists reference.Include then
             let p = Path.GetFullPath reference.Include
             [| yield p; |]
-        else
+        elif target.FrameworkTarget = FrameworkTarget.Net then
             [| sysLib ver reference.Include |]
+        else
+            [||]
 
     let getCompilerParams (target : Target.Target) fsharpCore (refs : Reference[]) =
         let ver = target.FrameworkVersion.ToString()
