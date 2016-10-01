@@ -129,7 +129,10 @@ module References =
             |> Array.where (fun n -> n.IsPackage)
             |> Array.map(fun n -> n.Include |> Package.getAssemblies target)
             |> Array.collect id
-            |> Array.map(fun n -> if Path.IsPathRooted n then n else sysLib ver n)
+            |> Array.choose(fun n ->
+                if Path.IsPathRooted n then Some n
+                elif isFullFramework then Some (sysLib ver n)
+                else None)
         let allRefs = Array.concat [references; packages]
         let allRefs = if allRefs |> Array.exists (fun n -> isFullFramework && dependsOnFacade n) then Array.concat [allRefs; getFacade ver] else allRefs
         let allRefs = allRefs |> Array.distinctBy Path.GetFileName
@@ -206,6 +209,8 @@ let getFSharpProjectOptions  (target : Target.Target) ((path,project) : string *
 let compile (target : Target.Target) ((path,project) : string * FsTomlProject) =
      let scs = SimpleSourceCodeServices()
      let prms = getCompilerParams target (path, project)
+     printfn "Target:"
+     printfn "%A" target
      printfn "Compieler parameters:"
      printfn "%A" prms
      prms |> scs.Compile

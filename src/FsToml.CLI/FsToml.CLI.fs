@@ -73,7 +73,7 @@ module Arguments =
 
 
     type CompileArgs =
-        | Framework of Framework option
+        // | Framework of Framework option
         | Version of Version option
         | Platform of Platform option
         | Build of Build option
@@ -82,8 +82,8 @@ module Arguments =
         interface IArgParserTemplate with
             member this.Usage =
                 match this with
-                | Framework _ -> "Specify target framework profile of this assembly. Valid values are `full` or `netcore`. Default value: `full`"
-                | Version _ -> "Specify target framework version of this assembly. Only for `full` profile, Valid values are `4.5`, `4.5.1`, `4.6`, `4.6.1`, `4.6.2`. Default value: `4.5`"
+                // | Framework _ -> "Specify target framework profile of this assembly. Valid values are `full` or `netcore`. Default value: `full`"
+                | Version _ -> "Specify target framework version of this assembly. Valid values are `4.5`, `4.5.1`, `4.6`, `4.6.1`, `4.6.2`. Default value: `4.5`"
                 | Platform _ -> "Specify target platform of this assembly. Valid values are `x64`, `x86`, `AnyCPU`. Default value: `AnyCPU`"
                 | Build _ -> "Specify target build type of this assembly. Valid values are `Debug` and `Release`. Default value: `Debug`"
                 | Proj _ -> "Relative or absolute path to `project.fstoml` file. Required"
@@ -102,10 +102,10 @@ module Arguments =
     let toTarget (pr : ParseResults<CompileArgs>) =
         let proj = pr.GetResult <@ CompileArgs.Proj @>
 
-        let target =
-            match pr.TryGetResult <@ CompileArgs.Framework @> |> Option.bind id with
-            | None | Some Full -> FrameworkTarget.Net
-            | Some Netcore -> FrameworkTarget.NetcoreApp
+        let target = FrameworkTarget.Net
+            // match pr.TryGetResult <@ CompileArgs.Framework @> |> Option.bind id with
+            // | None | Some Full -> FrameworkTarget.Net
+            // | Some Netcore -> FrameworkTarget.NetcoreApp
 
         let ver =
             match target with
