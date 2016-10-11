@@ -31,18 +31,18 @@ NoWarn = [52, 40]
 OtherFlags = [ '--warnon:1182' ]
 
 # configurations
-[ netcore ]
+[ net ]
    DebugSymbols = false
 
-[ netcore.Release ]
+[ net.Release ]
     Constants = [ 'RELEASE', 'FABLE' ]
     DebugType = 'pdbonly'
     Optimize = true
 
-[ netcore."1_6".Release.x86 ]
+[ net."4_5".Release.x86 ]
     OutputPath = "bin/Release/x86"
 
-[ netcore."1_6".Release.x64 ]
+[ net."4_5".Release.x64 ]
     OutputPath = "bin/Release/x64"
 
 
