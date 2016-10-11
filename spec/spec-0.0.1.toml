@@ -1,0 +1,103 @@
+
+#=======================================================#
+# `.fstoml` F# Project File Specification Version 0.0.1 #
+#=======================================================#
+
+# Toplevel Only Properties/Keys
+
+# FsTomlVersion   : string  - Semantic Version Number of fstoml spec compliance
+# Name            : string
+# AssemblyName    : string option
+# RootNamespace   : string option
+# Guid            : Guid
+# OutputType      : Library | Exe | Winexe | Module
+# FSharpCore      : string  - Version Number of FSharp.Core
+
+FsTomlVersion   = '0.0.1'
+Name            = 'Library1'
+AssemblyName    = 'Library1'
+RootNamespace   = 'Library1'
+Guid            = 'bb0c6f01-5e57-4575-a498-5de850d9fa6c'
+OutputType      = 'Library'
+FSharpCore      = '4.4.0.0'
+
+# SrcFile : { (BuildAction : Compile|Content|Resource|EmbeddedResource|None) * (Path:string)
+#             Link : string option
+#             Sig  : string option
+#             Private : bool option
+#             Copy : Always|Never|Newest option }
+#
+# Files - Array of inline tables representing SrcFiles listed in compilation order for the project
+
+Files = [
+    { None = "paket.references" },
+    { Compile = "src/file.fs" },
+    { Compile = "src/file2.fs", Link = "src/uselessLink.fs" },
+    { Compile = "src/file3.fs", Sig = "src/file3.fsi" },
+    { None    = "src/script.fsx", Private = true },
+]
+
+# Reference : { (Type : Framework|Library|Project|Package) * (Path:string)
+#             Private : bool option
+#             SpecificVersion : bool option }
+#
+# References - Array of inline tables for dll, package and project references
+
+References = [
+    { Framework = "System" },
+    { Framework = "FSharp.Core" },
+    { Project   = "Deppy.fstoml" },
+    { Library   = "lib/Fable.Core.dll", Private = true },
+    { Package   = "Nett" }
+]
+
+
+# - Configuration Properties (can be overridden) -
+# DebugType : None | PdbOnly | Full option
+# OutputPath : string option
+# DocumentationFile : string option
+# DebugSymbols : bool option
+# Optimize : bool option
+# Tailcalls : bool option
+# WarningsAsErrors : bool option
+# Constants : string [] option
+# Prefer32bit : bool option
+# WarningLevel : 1..5 option
+# Constants : string [] option
+# NoWarn : int [] option
+# OtherFlags : string [] option
+
+DebugSymbols = true
+DebugType = 'full'
+Optimize = false
+NoWarn = [52, 40]
+OtherFlags = [ '--warnon:1182' ]
+
+#  - Configurations -
+#
+# [ <TargetFrameworkIdentifier> . <TargetFrameworkVersion> . <Configuration> . <Platform> ]
+#
+#   Framework Ids   : net | netStandard | netcoreapp
+#   Platform        : AnyCpu | x86 | x64
+#
+#   Framework Versions :
+#       net         : "4_5" | "4_5_1" | "4_6" | "4_6_1" | "4_6_2"
+#       netcoreapp  : "1_0"
+#       netstandard : "1_0" | "1_1" | "1_2" | "1_3" | "1_4" | "1_5" | "1_6"
+#
+#   Configuration   : Debug | Release
+
+# - Configuration Examples -
+
+[ net."4_5".Release ]
+    Constants = [ 'RELEASE', 'FABLE' ]
+    DebugSymbols = false
+    DebugType = 'pdb'
+    Optimize = true
+
+[  net."4_5".Release.x86 ]
+    OutputPath = "bin/Release/x86"
+
+[  net."4_5".Release.x64 ]
+    OutputPath = "bin/Release/x64"
+

@@ -19,7 +19,7 @@ Files = [
 References = [
     { Framework = "System" },
     { Framework = "FSharp.Core", CopyLocal = 'Always' },
-    { Project   = "Deppy.fsproj" },
+    { Project   = "Deppy.fstoml" },
     { Library   = "lib/Fable.Core.dll", Private = true },
     { Package   = "Nett" }
 ]
