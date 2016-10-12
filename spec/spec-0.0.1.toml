@@ -1,6 +1,6 @@
 
 #=======================================================#
-# `.fstoml` F# Project File Specification Version 0.0.1 #
+# `.fstoml` F# Project File Specification Version 0.0.2 #
 #=======================================================#
 
 # Toplevel Only Properties/Keys
@@ -14,7 +14,7 @@
 # FSharpCore       : string  - Version Number of FSharp.Core
 # FrameworkVersion : string option - Version of .Net Framework
 
-FsTomlVersion    = '0.0.1'
+FsTomlVersion    = '0.0.2'
 Name             = 'Library1'
 AssemblyName     = 'Library1'
 RootNamespace    = 'Library1'
@@ -39,17 +39,19 @@ Files = [
     { None    = "src/script.fsx", Private = true },
 ]
 
-# Reference : { (Type : Framework|Library|Project|Package) * (Path:string)
+# Reference = Dll | Exe | GAC/Framework Lib
+# Dependency : { (Type : Reference|Project|Package) * (Path:string)
 #             Private : bool option
 #             SpecificVersion : bool option }
 #
-# References - Array of inline tables for dll, package and project references
+# Dependencies - Array of inline tables for dll, exe, package and project references
 
-References = [
-    { Framework = "System" },
-    { Framework = "FSharp.Core" },
+Dependencies = [
+    { Reference = "System" },
+    { Reference = "FSharp.Core" },
+    { Reference = "bin/console.exe" },
     { Project   = "Deppy.fstoml" },
-    { Library   = "lib/Fable.Core.dll", Private = true },
+    { Reference   = "lib/Fable.Core.dll", Private = true },
     { Package   = "Nett" }
 ]
 
