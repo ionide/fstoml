@@ -6,6 +6,7 @@ RootNamespace   = 'FsToml.CompilerService'
 Guid            = 'cb1359ac-44ed-46ec-8eee-7ac0f73c79f2'
 OutputType      = 'Library'
 FSharpCore      = '4.4.0.0'
+FrameworkVersion = '4.6.1'
 
 
 Files = [

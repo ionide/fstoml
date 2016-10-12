@@ -32,7 +32,10 @@ let target = {
 let path = System.IO.Path.Combine (__SOURCE_DIRECTORY__, "testproject.CompilerService.toml")
 let t = FsToml.Parser.parse path
 let p = FsToml.Transform.CompilerService.getCompilerParams target (path, t)
+let p2 = FsToml.Transform.CompilerService.getFSharpProjectOptionsFromFile None path
+
 printf "%A" p
+printf "%A" p2
 
 
 // [|"--noframework"; "--fullpaths"; "--flaterrors"; "--subsystemversion:6.00";
