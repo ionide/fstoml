@@ -5,21 +5,23 @@
 
 # Toplevel Only Properties/Keys
 
-# FsTomlVersion   : string  - Semantic Version Number of fstoml spec compliance
-# Name            : string
-# AssemblyName    : string option
-# RootNamespace   : string option
-# Guid            : Guid
-# OutputType      : Library | Exe | Winexe | Module
-# FSharpCore      : string  - Version Number of FSharp.Core
+# FsTomlVersion    : string  - Semantic Version Number of fstoml spec compliance
+# Name             : string
+# AssemblyName     : string option
+# RootNamespace    : string option
+# Guid             : Guid
+# OutputType       : Library | Exe | Winexe | Module
+# FSharpCore       : string  - Version Number of FSharp.Core
+# FrameworkVersion : string option - Version of .Net Framework
 
-FsTomlVersion   = '0.0.1'
-Name            = 'Library1'
-AssemblyName    = 'Library1'
-RootNamespace   = 'Library1'
-Guid            = 'bb0c6f01-5e57-4575-a498-5de850d9fa6c'
-OutputType      = 'Library'
-FSharpCore      = '4.4.0.0'
+FsTomlVersion    = '0.0.1'
+Name             = 'Library1'
+AssemblyName     = 'Library1'
+RootNamespace    = 'Library1'
+Guid             = 'bb0c6f01-5e57-4575-a498-5de850d9fa6c'
+OutputType       = 'Library'
+FSharpCore       = '4.4.0.0'
+FrameworkVersion = '4.6'
 
 # SrcFile : { (BuildAction : Compile|Content|Resource|EmbeddedResource|None) * (Path:string)
 #             Link : string option
