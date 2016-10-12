@@ -37,19 +37,20 @@ type TomlProject () =
     member val OutputType        : string               = "" with get, set
     member val FSharpCore        : string               = "" with get, set
     member val DebugType         : string               = "" with get, set
-    member val OutputPath        : string               = "" with get,set
-    member val DocumentationFile : string               = "" with get,set
+    member val OutputPath        : string               = "" with get, set
+    member val DocumentationFile : string               = "" with get, set
+    member val FrameworkVersion  : string               = "" with get, set
     member val DebugSymbols      : Nullable<bool>       = Nullable() with get, set
     member val Optimize          : Nullable<bool>       = Nullable() with get, set
-    member val Tailcalls         : Nullable<bool>       = Nullable() with get,set
-    member val WarningsAsErrors  : Nullable<bool>       = Nullable() with get,set
-    member val Prefer32bit       : Nullable<bool>       = Nullable() with get,set
-    member val WarningLevel      : Nullable<int>        = Nullable() with get,set
-    member val Constants         : string []            = [||] with get,set
+    member val Tailcalls         : Nullable<bool>       = Nullable() with get, set
+    member val WarningsAsErrors  : Nullable<bool>       = Nullable() with get, set
+    member val Prefer32bit       : Nullable<bool>       = Nullable() with get, set
+    member val WarningLevel      : Nullable<int>        = Nullable() with get, set
+    member val Constants         : string []            = [||] with get, set
     member val NoWarn            : int []               = [||] with get, set
     member val OtherFlags        : string []            = [||] with get, set
-    member val Files             : File []              = [||] with get,set
-    member val References        : References []        = [||] with get,set
+    member val Files             : File []              = [||] with get, set
+    member val References        : References []        = [||] with get, set
 
 let parseDebugType = function
     | InvariantEqual Constants.None    -> Some DebugType.None
@@ -99,6 +100,15 @@ let toProjectSystem (proj : TomlProject) : FsTomlProject =
     let fsharpVersion =
         let t = proj.FSharpCore.Split('.')
         FSharpVer (int t.[0], int t.[1], int t.[2], int t.[3])
+
+    let frameworkVersion =
+        match proj.FrameworkVersion with
+        | "4.5" -> Some FrameworkVersion.V4_5
+        | "4.5.1" -> Some FrameworkVersion.V4_5_1
+        | "4.6" -> Some FrameworkVersion.V4_6
+        | "4.6.1" -> Some FrameworkVersion.V4_6_1
+        | "4.6.2" -> Some FrameworkVersion.V4_6_2
+        | _  -> None
 
     let config = getConfig "" proj
 
@@ -154,9 +164,10 @@ let toProjectSystem (proj : TomlProject) : FsTomlProject =
 
     {
         FsTomlVersion = version
+        FrameworkVersion = frameworkVersion
         Name = proj.Name
-        AssemblyName = proj.AssemblyName
-        RootNamespace = proj.RootNamespace
+        AssemblyName = if isNull proj.AssemblyName then proj.Name else proj.AssemblyName
+        RootNamespace = if isNull proj.RootNamespace then proj.Name else proj.RootNamespace
         Guid = proj.Guid
         OutputType = proj.OutputType |> parseOutputType
         FSharpCore = fsharpVersion

@@ -177,6 +177,7 @@ type FsTomlProject = {
     Guid              : Guid
     OutputType        : OutputType
     FSharpCore        : FSharpVer
+    FrameworkVersion  : FrameworkVersion option
     Configurations    : Configuration []
     Files             : SourceFile []
     References        : Reference []
