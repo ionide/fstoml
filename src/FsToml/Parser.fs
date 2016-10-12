@@ -16,9 +16,8 @@ type File () =
     member val Sig              : string         = "" with get,set
     member val Private          : Nullable<bool> = Nullable() with get,set
 
-type References () =
-    member val Framework       : string         = null with get,set
-    member val Library         : string         = null with get,set
+type Dependency () =
+    member val Reference       : string         = null with get,set
     member val Project         : string         = null with get,set
     member val Package         : string         = null with get,set
     member val Name            : string         = "" with get,set
@@ -50,7 +49,7 @@ type TomlProject () =
     member val NoWarn            : int []               = [||] with get, set
     member val OtherFlags        : string []            = [||] with get, set
     member val Files             : File []              = [||] with get, set
-    member val References        : References []        = [||] with get, set
+    member val Dependencies      : Dependency []        = [||] with get, set
 
 let parseDebugType = function
     | InvariantEqual Constants.None    -> Some DebugType.None
@@ -113,12 +112,11 @@ let toProjectSystem (proj : TomlProject) : FsTomlProject =
     let config = getConfig "" proj
 
     let refs =
-        proj.References
+        proj.Dependencies
         |> Array.where (fun r -> isNull r.Project)
         |> Array.map (fun r ->
             let incl =
-                if isNotNull r.Framework then r.Framework
-                elif isNotNull r.Library then r.Library
+                if isNotNull r.Reference then r.Reference
                 else r.Package
 
             {
@@ -132,7 +130,7 @@ let toProjectSystem (proj : TomlProject) : FsTomlProject =
         )
 
     let projRefs =
-        proj.References
+        proj.Dependencies
         |> Array.where (fun r -> isNull r.Project |> not)
         |> Array.map (fun p ->
             {
