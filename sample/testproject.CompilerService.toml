@@ -15,12 +15,12 @@ Files = [
     { Compile = "AssemblyInfo.fs"}
 ]
 
-References = [
-    { Framework = "System" },
-    { Framework = "System.Core" },
-    { Framework = "System.Numerics" },
-    { Framework = "System.Xml" },
-    { Framework = "System.Xml.Linq" },
+Dependencies = [
+    { Reference = "System" },
+    { Reference = "System.Core" },
+    { Reference = "System.Numerics" },
+    { Reference = "System.Xml" },
+    { Reference = "System.Xml.Linq" },
     { Package = "FSharp.Compiler.Service" },
     { Package = "FSharp.Compiler.Service.ProjectCracker" },
     { Package = "Paket.Core" }

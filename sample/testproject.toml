@@ -16,11 +16,11 @@ Files = [
     { None    = "src/script.fsx", Private = true },
 ]
 
-References = [
-    { Framework = "System" },
-    { Framework = "FSharp.Core", CopyLocal = 'Always' },
+Dependencies = [
+    { Reference = "System" },
+    { Reference = "FSharp.Core", CopyLocal = 'Always' },
     { Project   = "Deppy.fstoml" },
-    { Library   = "lib/Fable.Core.dll", Private = true },
+    { Reference = "lib/Fable.Core.dll", Private = true },
     { Package   = "Nett" }
 ]
 
