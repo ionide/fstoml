@@ -57,7 +57,7 @@ We want:
 
 * Have lightweight, human readable, easy to parse project file for F#
 * Use fully declarative style - no custom programming language inside of project file
-* Supprt popular types of F# applications
+* Support popular types of F# applications
 * Provide easy migration path to `fsproj` in case user needs more advanced features
 * Provide integrated Paket support
 * Support .Net 4.5+, .Net Standard, .Net Core
