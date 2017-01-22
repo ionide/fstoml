@@ -93,6 +93,3 @@ The library is available under [MIT license](https://github.com/fsprojects/fstom
 * Krzysztof Cieślak [@Krzysztof-Cieslak](https://github.com/Krzysztof-Cieslak)
 * Matthias Dittrich [@matthid](https://github.com/matthid)
 * Steffen Forkmann [@forki](https://github.com/forki)
-
-
-The default maintainer account for projects under "fsprojects" is [@fsprojectsgit](https://github.com/fsprojectsgit) - F# Community Project Incubation Space (repo management)
