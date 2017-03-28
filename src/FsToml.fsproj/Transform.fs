@@ -111,18 +111,18 @@ let transformBuildConfig(c : Configuration) : ConfigSettings =
 let transformSettings (tomlProj : FsTomlProject ) : ProjectSettings =
     {
         Name                         = property Constants.Name tomlProj.Name
-        AssemblyName                 = property Constants.AssemblyName tomlProj.AssemblyName
-        RootNamespace                = property Constants.RootNamespace tomlProj.RootNamespace
+        AssemblyName                 = optProperty Constants.AssemblyName tomlProj.AssemblyName
+        RootNamespace                = optProperty Constants.RootNamespace tomlProj.RootNamespace
         Configuration                = emptyProperty Constants.Configuration
         Platform                     = emptyProperty Constants.Platform
         SchemaVersion                = property Constants.SchemaVersion "2.0"
-        ProjectGuid                  = property Constants.ProjectGuid tomlProj.Guid
+        ProjectGuid                  = optProperty Constants.ProjectGuid tomlProj.Guid
         ProjectType                  = emptyProperty Constants.ProjectType
         OutputType                   = property Constants.OutputType (transformOutputType tomlProj.OutputType)
         TargetFrameworkVersion       = emptyProperty Constants.TargetFrameworkVersion
         TargetFrameworkProfile       = emptyProperty Constants.TargetFrameworkProfile
         AutoGenerateBindingRedirects = emptyProperty Constants.AutoGenerateBindingRedirects
-        TargetFSharpCoreVersion      = property Constants.TargetFSharpCoreVersion (tomlProj.FSharpCore.ToString())
+        TargetFSharpCoreVersion      = emptyProperty Constants.TargetFSharpCoreVersion
         DocumentationFile            = emptyProperty Constants.DocumentationFile
     }
 

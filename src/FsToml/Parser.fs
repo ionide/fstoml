@@ -28,13 +28,11 @@ type Dependency () =
 
 
 type TomlProject () =
-    member val FsTomlVersion     : string               = "" with get, set
     member val Name              : string               = "" with get, set
-    member val Guid              : Guid                 = Guid.Empty with get, set
-    member val AssemblyName      : string               = "" with get, set
-    member val RootNamespace     : string               = "" with get, set
+    member val Guid              : Nullable<Guid>       = Nullable() with get, set
+    member val AssemblyName      : string               = null with get, set
+    member val RootNamespace     : string               = null with get, set
     member val OutputType        : string               = "" with get, set
-    member val FSharpCore        : string               = "" with get, set
     member val DebugType         : string               = "" with get, set
     member val OutputPath        : string               = "" with get, set
     member val DocumentationFile : string               = "" with get, set
@@ -91,14 +89,6 @@ let getConfig condition (proj : TomlProject) =
 
 let toProjectSystem (proj : TomlProject) : FsTomlProject =
     let isNotNull = isNull >> not
-
-    let version =
-        let t = proj.FsTomlVersion.Split('.')
-        SemVer (int t.[0], int t.[1], int t.[2])
-
-    let fsharpVersion =
-        let t = proj.FSharpCore.Split('.')
-        FSharpVer (int t.[0], int t.[1], int t.[2], int t.[3])
 
     let frameworkVersion =
         match proj.FrameworkVersion with
@@ -161,14 +151,12 @@ let toProjectSystem (proj : TomlProject) : FsTomlProject =
         )
 
     {
-        FsTomlVersion = version
         FrameworkVersion = frameworkVersion
         Name = proj.Name
-        AssemblyName = if isNull proj.AssemblyName then proj.Name else proj.AssemblyName
-        RootNamespace = if isNull proj.RootNamespace then proj.Name else proj.RootNamespace
-        Guid = proj.Guid
+        AssemblyName = proj.AssemblyName |> Option.ofObj
+        RootNamespace = proj.RootNamespace |> Option.ofObj
+        Guid = proj.Guid |> Option.ofNullable
         OutputType = proj.OutputType |> parseOutputType
-        FSharpCore = fsharpVersion
         Configurations = [|config|]
         ProjectReferences = projRefs
         References = refs
