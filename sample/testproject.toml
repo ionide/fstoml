@@ -1,11 +1,7 @@
 ﻿
-FsTomlVersion   = '0.0.1'
 Name            = 'Library1'
-AssemblyName    = 'Library1'
-RootNamespace   = 'Library1'
-Guid            = 'bb0c6f01-5e57-4575-a498-5de850d9fa6c'
 OutputType      = 'Library'
-FSharpCore      = '4.4.0.0'
+FrameworkVersion = '4.6.1'
 
 
 Files = [

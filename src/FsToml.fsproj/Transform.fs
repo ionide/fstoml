@@ -36,19 +36,19 @@ module Conditions =
             | None , Some v, Some p ->
                 sprintf "(%s) AND (%s)" (getFrameworkVersionCondition v) (getPlatformCondition p)
             | Some f, None, None ->
-                sprintf "(%s)" (getFrameworkTargetCondition f)
+                sprintf "%s" (getFrameworkTargetCondition f)
             | None, Some v, None ->
-                sprintf "(%s)" (getFrameworkVersionCondition v)
+                sprintf "%s" (getFrameworkVersionCondition v)
             | None, None, Some p ->
-                sprintf "(%s)" (getPlatformCondition p)
+                sprintf "%s" (getPlatformCondition p)
             | None, None, None -> ""
 
         let b =
             match build with
-            | Some b -> sprintf "(%s)" (getBuildTypeCondition b)
+            | Some b -> sprintf "%s" (getBuildTypeCondition b)
             | None  -> ""
 
-        if fvp <> "" && b <> "" then fvp + " AND " + b else fvp + b
+        if fvp <> "" && b <> "" then sprintf "(%s) AND (%s)" fvp b else fvp + b
 
 
 
@@ -111,14 +111,15 @@ let transformBuildConfig(c : Configuration) : ConfigSettings =
 let transformSettings (tomlProj : FsTomlProject ) : ProjectSettings =
     {
         Name                         = property Constants.Name tomlProj.Name
+        OutputType                   = property Constants.OutputType (transformOutputType tomlProj.OutputType)
         AssemblyName                 = optProperty Constants.AssemblyName tomlProj.AssemblyName
         RootNamespace                = optProperty Constants.RootNamespace tomlProj.RootNamespace
+        ProjectGuid                  = optProperty Constants.ProjectGuid tomlProj.Guid
+
         Configuration                = emptyProperty Constants.Configuration
         Platform                     = emptyProperty Constants.Platform
-        SchemaVersion                = property Constants.SchemaVersion "2.0"
-        ProjectGuid                  = optProperty Constants.ProjectGuid tomlProj.Guid
+        SchemaVersion                = emptyProperty Constants.SchemaVersion
         ProjectType                  = emptyProperty Constants.ProjectType
-        OutputType                   = property Constants.OutputType (transformOutputType tomlProj.OutputType)
         TargetFrameworkVersion       = emptyProperty Constants.TargetFrameworkVersion
         TargetFrameworkProfile       = emptyProperty Constants.TargetFrameworkProfile
         AutoGenerateBindingRedirects = emptyProperty Constants.AutoGenerateBindingRedirects
@@ -148,39 +149,31 @@ let transformReference (tomlReference : Reference) =
     }
 
 let transformProjectReference (tomlProjectReference : ProjectReference) =
-    let name =
-        if tomlProjectReference.Name.IsNone then
-            System.IO.Path.GetFileName tomlProjectReference.Include |> Some
-        else
-            tomlProjectReference.Name
-
-    let guid =
-        if tomlProjectReference.Guid.IsNone then
-            let p = tomlProjectReference.Include |> System.IO.Path.GetFullPath
-            if System.IO.File.Exists p then
-                let proj = Forge.ProjectSystem.FsProject.load p
-                proj.Settings.ProjectGuid.Data
-            else
-                None
-        else
-            tomlProjectReference.Guid
-
     {
-        Forge.ProjectSystem.ProjectReference.Include   = tomlProjectReference.Include
+        Forge.ProjectSystem.ProjectReference.Include   = tomlProjectReference.Include |> String.replace ".fstoml" ".fsproj"
         Forge.ProjectSystem.ProjectReference.Condition = None
-        Forge.ProjectSystem.ProjectReference.Name      = name
-        Forge.ProjectSystem.ProjectReference.Guid      = guid
+        Forge.ProjectSystem.ProjectReference.Name      = tomlProjectReference.Name
+        Forge.ProjectSystem.ProjectReference.Guid      = tomlProjectReference.Guid
         Forge.ProjectSystem.ProjectReference.CopyLocal = tomlProjectReference.CopyLocal
     }
-
 
 let transform (tomlProj : FsTomlProject ) : (FsProject * string list) =
     {
         ToolsVersion      = "14.0"
         DefaultTargets    = ["Build"]
         BuildConfigs      = tomlProj.Configurations |> Array.map transformBuildConfig |> Array.toList
-        ProjectReferences = tomlProj.ProjectReferences |> Array.where (fun n -> n.Include.EndsWith ".fsproj" ) |> Array.map transformProjectReference |> ResizeArray
+        ProjectReferences = tomlProj.ProjectReferences |> Array.where (fun n -> n.Include.EndsWith ".fsproj"  || n.Include.EndsWith ".fstoml") |> Array.map transformProjectReference |> ResizeArray
         References        = tomlProj.References |> Array.where (fun n -> n.IsPackage |> not) |> Array.map transformReference |> ResizeArray
         SourceFiles       = tomlProj.Files |> Array.map transformSourceFile |> Array.toList |> SourceTree
         Settings          = transformSettings tomlProj
     }, tomlProj.References |> Seq.where (fun n -> n.IsPackage) |> Seq.map (fun n -> n.Include) |> Seq.toList
+
+//This should be done in new version of Forge Project Model
+let toString (paketTarget : string) (input : FsProject) =
+    let r =
+        input.ToXmlString().Split '\n'
+        |> Array.skip 2
+        |> String.concat "\n"
+        |> String.replace "</Project>" (sprintf "<Import Project=\"%s\" />\n</Project>" paketTarget)
+
+    "<Project Sdk=\"FSharp.NET.Sdk;Microsoft.NET.Sdk\">\n" + r
