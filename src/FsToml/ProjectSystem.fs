@@ -170,13 +170,11 @@ type ProjectReference = {
 }
 
 type FsTomlProject = {
-    FsTomlVersion     : SemVer
     Name              : string
-    AssemblyName      : string
-    RootNamespace     : string
-    Guid              : Guid
+    AssemblyName      : string option
+    RootNamespace     : string option
+    Guid              : Guid option
     OutputType        : OutputType
-    FSharpCore        : FSharpVer
     FrameworkVersion  : FrameworkVersion option
     Configurations    : Configuration []
     Files             : SourceFile []
