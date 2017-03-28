@@ -157,23 +157,30 @@ let transformProjectReference (tomlProjectReference : ProjectReference) =
         Forge.ProjectSystem.ProjectReference.CopyLocal = tomlProjectReference.CopyLocal
     }
 
-let transform (tomlProj : FsTomlProject ) : (FsProject * string list) =
+let transform target (tomlProj : FsTomlProject ) : (FsProject) =
+    let packages =
+        tomlProj.References
+        |> Seq.where (fun n -> n.IsPackage)
+        |> Seq.map (fun n -> n.Include)
+        |> Seq.collect (Package.getAssemblies target)
+        |> Seq.map ( fun n ->
+        {
+            Forge.ProjectSystem.Reference.Include         = n
+            Forge.ProjectSystem.Reference.Condition       = None
+            Forge.ProjectSystem.Reference.HintPath        = None
+            Forge.ProjectSystem.Reference.Name            = None
+            Forge.ProjectSystem.Reference.SpecificVersion = None
+            Forge.ProjectSystem.Reference.CopyLocal       = None
+            Forge.ProjectSystem.Reference.Paket           = None
+        })
+        |> Seq.toArray
+
     {
-        ToolsVersion      = "14.0"
-        DefaultTargets    = ["Build"]
+        ToolsVersion      = ""
+        DefaultTargets    = []
         BuildConfigs      = tomlProj.Configurations |> Array.map transformBuildConfig |> Array.toList
         ProjectReferences = tomlProj.ProjectReferences |> Array.where (fun n -> n.Include.EndsWith ".fsproj"  || n.Include.EndsWith ".fstoml") |> Array.map transformProjectReference |> ResizeArray
-        References        = tomlProj.References |> Array.where (fun n -> n.IsPackage |> not) |> Array.map transformReference |> ResizeArray
+        References        = [| yield! (tomlProj.References |> Array.where (fun n -> n.IsPackage |> not) |> Array.map transformReference); yield! packages  |] |> ResizeArray
         SourceFiles       = tomlProj.Files |> Array.map transformSourceFile |> Array.toList |> SourceTree
         Settings          = transformSettings tomlProj
-    }, tomlProj.References |> Seq.where (fun n -> n.IsPackage) |> Seq.map (fun n -> n.Include) |> Seq.toList
-
-//This should be done in new version of Forge Project Model
-let toString (paketTarget : string) (input : FsProject) =
-    let r =
-        input.ToXmlString().Split '\n'
-        |> Array.skip 2
-        |> String.concat "\n"
-        |> String.replace "</Project>" (sprintf "<Import Project=\"%s\" />\n</Project>" paketTarget)
-
-    "<Project Sdk=\"FSharp.NET.Sdk;Microsoft.NET.Sdk\">\n" + r
+    }

@@ -1,154 +1,41 @@
 FRAMEWORK: >= NET45
 NUGET
   remote: https://www.nuget.org/api/v2
-    Argu (3.3)
-      FSharp.Core (>= 4.0.1.7-alpha) - framework: >= net463
-      NETStandard.Library (>= 1.6) - framework: >= net463
-      System.Xml.XDocument (>= 4.0.11) - framework: >= net463
     Chessie (0.6)
       FSharp.Core
-    FSharp.Compiler.Service (6.0.2)
-      System.Collections.Immutable (>= 1.2)
-      System.Reflection.Metadata (>= 1.4.1-beta-24227-04)
-    FSharp.Compiler.Service.ProjectCracker (6.0.2)
-    FSharp.Core (4.0.1.7-alpha) - redirects: force
-      Microsoft.NETCore.Platforms (>= 1.0.1) - framework: >= net463
-      NETStandard.Library (>= 1.6) - framework: >= net463
-      System.Linq.Expressions (>= 4.1) - framework: >= net463
-      System.Linq.Queryable (>= 4.0.1) - framework: >= net463
-      System.Net.Requests (>= 4.0.11) - framework: >= net463
-      System.Reflection.Emit (>= 4.0.1) - framework: >= net463
-      System.Reflection.TypeExtensions (>= 4.1) - framework: >= net463
-      System.Runtime.Loader (>= 4.0) - framework: >= net463
-      System.Threading.Tasks.Parallel (>= 4.0.1) - framework: >= net463
-      System.Threading.Thread (>= 4.0) - framework: >= net463
-      System.Threading.ThreadPool (>= 4.0.10) - framework: >= net463
-    FsUnit (2.3.1)
-      FSharp.Core (>= 3.1.2.5)
-      NUnit (3.4.1)
-    Microsoft.NETCore.Platforms (1.0.1) - redirects: force, framework: >= net463
-    Microsoft.Win32.Primitives (4.0.1) - redirects: force
-    Mono.Cecil (0.9.6.4)
-    NETStandard.Library (1.6)
-      Microsoft.Win32.Primitives (>= 4.0.1) - framework: >= net46
-      System.AppContext (>= 4.1) - framework: >= net46
-      System.Collections.Concurrent (>= 4.0.12)
-      System.Console (>= 4.0) - framework: >= net46
-      System.Diagnostics.Tracing (>= 4.1)
-      System.Globalization.Calendars (>= 4.0.1) - framework: >= net46
-      System.IO.Compression (>= 4.1)
-      System.IO.Compression.ZipFile (>= 4.0.1) - framework: >= net46
-      System.IO.FileSystem (>= 4.0.1) - framework: >= net46
-      System.IO.FileSystem.Primitives (>= 4.0.1) - framework: >= net46
-      System.Net.Http (>= 4.1)
-      System.Net.Sockets (>= 4.1) - framework: >= net46
-      System.Runtime.Handles (>= 4.0.1) - framework: >= net46
-      System.Runtime.InteropServices (>= 4.1)
-      System.Runtime.InteropServices.RuntimeInformation (>= 4.0)
-      System.Runtime.Numerics (>= 4.0.1)
-      System.Security.Cryptography.Algorithms (>= 4.2) - framework: >= net46
-      System.Security.Cryptography.Encoding (>= 4.0) - framework: >= net46
-      System.Security.Cryptography.Primitives (>= 4.0) - framework: >= net46
-      System.Security.Cryptography.X509Certificates (>= 4.1) - framework: >= net46
-      System.Threading.Timer (>= 4.0.1) - framework: >= net451
-    Nett (0.5)
-    Newtonsoft.Json (9.0.1)
-    NUnit (3.4.1)
-    NUnit.ConsoleRunner (3.4.1)
-    NUnit.Extension.NUnitProjectLoader (3.4.1)
-    NUnit.Extension.NUnitV2Driver (3.4.1)
-    NUnit.Extension.NUnitV2ResultWriter (3.4.1)
-    NUnit.Extension.TeamCityEventListener (1.0.1)
-    NUnit.Extension.VSProjectLoader (3.4.1)
-    NUnit.Runners (3.4.1)
-      NUnit.ConsoleRunner (>= 3.4.1)
-      NUnit.Extension.NUnitProjectLoader (>= 3.4.1)
-      NUnit.Extension.NUnitV2Driver (>= 3.4.1)
-      NUnit.Extension.NUnitV2ResultWriter (>= 3.4.1)
-      NUnit.Extension.TeamCityEventListener (>= 1.0.1)
-      NUnit.Extension.VSProjectLoader (>= 3.4.1)
-    Paket.Core (3.20.2)
-      Chessie
+    FSharp.Core (4.1.2) - redirects: force
+      System.ValueTuple (>= 4.3)
+    Mono.Cecil (0.10.0-beta4)
+    Nett (0.6.2)
+    Newtonsoft.Json (10.0.1)
+    Paket.Core (4.0.11)
+      Chessie (>= 0.6)
       FSharp.Core
-      Mono.Cecil
+      Mono.Cecil (>= 0.10.0-beta4)
       Newtonsoft.Json
-    System.AppContext (4.1) - redirects: force
-    System.Collections.Concurrent (4.0.12) - redirects: force
-    System.Collections.Immutable (1.2)
-    System.Console (4.0) - redirects: force
-    System.Diagnostics.DiagnosticSource (4.0) - redirects: force, framework: >= net46
-    System.Diagnostics.Tracing (4.1) - redirects: force
-    System.Globalization.Calendars (4.0.1) - redirects: force
-    System.IO (4.1) - redirects: force, framework: >= net463
-    System.IO.Compression (4.1) - redirects: force
-    System.IO.Compression.ZipFile (4.0.1) - redirects: force
-    System.IO.FileSystem (4.0.1) - redirects: force
-      System.IO.FileSystem.Primitives (>= 4.0.1) - framework: >= net46
-    System.IO.FileSystem.Primitives (4.0.1) - redirects: force
-    System.Linq.Expressions (4.1) - redirects: force, framework: >= net463
-    System.Linq.Queryable (4.0.1) - redirects: force, framework: >= net463
-    System.Net.Http (4.1) - redirects: force
-      Microsoft.Win32.Primitives (>= 4.0.1) - framework: >= net46
-      System.Diagnostics.DiagnosticSource (>= 4.0) - framework: >= net46
-      System.Security.Cryptography.X509Certificates (>= 4.1) - framework: >= net46
-    System.Net.Requests (4.0.11) - redirects: force, framework: >= net463
-    System.Net.Sockets (4.1) - redirects: force
-    System.Reflection (4.1) - redirects: force, framework: >= net463
-    System.Reflection.Emit (4.0.1) - redirects: force, framework: >= net463
-    System.Reflection.Metadata (1.4.1-beta-24227-04)
-      System.Collections.Immutable (>= 1.2)
-    System.Reflection.TypeExtensions (4.1) - redirects: force, framework: >= net463
-      System.Reflection (>= 4.1) - framework: >= net462
-    System.Runtime (4.1) - redirects: force
-    System.Runtime.Handles (4.0.1) - redirects: force
-    System.Runtime.InteropServices (4.1) - redirects: force
-      System.Runtime (>= 4.1) - framework: >= net462
-    System.Runtime.InteropServices.RuntimeInformation (4.0) - redirects: force
-    System.Runtime.Loader (4.0) - redirects: force, framework: >= net463
-    System.Runtime.Numerics (4.0.1) - redirects: force
-    System.Security.Cryptography.Algorithms (4.2) - redirects: force
-      System.IO (>= 4.1) - framework: >= net463
-      System.Runtime (>= 4.1) - framework: >= net463
-      System.Security.Cryptography.Encoding (>= 4.0) - framework: >= net463
-      System.Security.Cryptography.Primitives (>= 4.0) - framework: net46, net461, >= net463
-    System.Security.Cryptography.Encoding (4.0) - redirects: force
-    System.Security.Cryptography.Primitives (4.0) - redirects: force
-    System.Security.Cryptography.X509Certificates (4.1) - redirects: force
-      System.Security.Cryptography.Algorithms (>= 4.2) - framework: >= net46
-      System.Security.Cryptography.Encoding (>= 4.0) - framework: >= net46
-    System.Threading.Tasks.Parallel (4.0.1) - redirects: force, framework: >= net463
-    System.Threading.Thread (4.0) - redirects: force, framework: >= net463
-    System.Threading.ThreadPool (4.0.10) - redirects: force, framework: >= net463
-    System.Threading.Timer (4.0.1) - redirects: force
-    System.Xml.XDocument (4.0.11) - framework: >= net463
+    System.ValueTuple (4.3) - redirects: force
 GIT
-  remote: https://github.com/fsprojects/Forge.git
-     (6a9466102b2fbc0ad606617bfa371aec92e595ad)
+  remote: https://github.com/fsharp-editing/Forge.git
+     (4c080a569ef36f4649c18b5b64dbee4c995fc2b7)
       build: build.cmd BuildProjectSystem
       os: Windows
-     (6a9466102b2fbc0ad606617bfa371aec92e595ad)
+     (4c080a569ef36f4649c18b5b64dbee4c995fc2b7)
       build: build.sh BuildProjectSystem
       os: mono
 GROUP Build
+FRAMEWORK: >= NET45
 NUGET
   remote: https://www.nuget.org/api/v2
-    FAKE (4.40.1)
+    FAKE (4.57.2)
     FSharp.Compiler.Service (2.0.0.6)
     FSharp.Formatting (2.14.4)
       FSharp.Compiler.Service (2.0.0.6)
       FSharpVSPowerTools.Core (>= 2.3 < 2.4)
     FSharpVSPowerTools.Core (2.3)
       FSharp.Compiler.Service (>= 2.0.0.3)
-    Microsoft.Bcl (1.1.10) - framework: net10, net11, net20, net30, net35, net40, net40-full
-      Microsoft.Bcl.Build (>= 1.0.14)
-    Microsoft.Bcl.Build (1.0.21) - import_targets: false, framework: net10, net11, net20, net30, net35, net40, net40-full
-    Microsoft.Net.Http (2.2.29) - framework: net10, net11, net20, net30, net35, net40, net40-full
-      Microsoft.Bcl (>= 1.1.10)
-      Microsoft.Bcl.Build (>= 1.0.14)
-    Octokit (0.22)
-      Microsoft.Net.Http  - framework: net10, net11, net20, net30, net35, net40, net40-full
+    Octokit (0.24)
     SourceLink.Fake (1.1)
 GITHUB
   remote: fsharp/FAKE
-    modules/Octokit/Octokit.fsx (d071e770b2edfe6c9c7242003b2939ad9d0e33a5)
+    modules/Octokit/Octokit.fsx (5d6f1623e4a60a1eb972e0e655e1e57991b26f71)
       Octokit (>= 0.20)
