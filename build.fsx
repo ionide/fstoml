@@ -401,8 +401,8 @@ Target "All" DoNothing
   ==> "AssemblyInfo"
   ==> "Build"
   ==> "CopyBinaries"
-  ==> "RunTests"
-  ==> "RunIntegrationTests"
+//   ==> "RunTests"
+//   ==> "RunIntegrationTests"
   ==> "GenerateReferenceDocs"
   ==> "GenerateDocs"
 #if MONO
@@ -432,4 +432,4 @@ Target "All" DoNothing
 "ReleaseDocs"
   ==> "Release"
 
-RunTargetOrDefault "RunIntegrationTests"
+RunTargetOrDefault "CopyBinaries"

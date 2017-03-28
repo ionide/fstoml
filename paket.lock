@@ -6,7 +6,7 @@ NUGET
     FSharp.Core (4.1.2) - redirects: force
       System.ValueTuple (>= 4.3)
     Mono.Cecil (0.10.0-beta4)
-    Nett (0.6.2)
+    Nett (0.5)
     Newtonsoft.Json (10.0.1)
     Paket.Core (4.0.11)
       Chessie (>= 0.6)
@@ -16,10 +16,10 @@ NUGET
     System.ValueTuple (4.3) - redirects: force
 GIT
   remote: https://github.com/fsharp-editing/Forge.git
-     (4c080a569ef36f4649c18b5b64dbee4c995fc2b7)
+     (6a9466102b2fbc0ad606617bfa371aec92e595ad)
       build: build.cmd BuildProjectSystem
       os: Windows
-     (4c080a569ef36f4649c18b5b64dbee4c995fc2b7)
+     (6a9466102b2fbc0ad606617bfa371aec92e595ad)
       build: build.sh BuildProjectSystem
       os: mono
 GROUP Build

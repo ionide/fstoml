@@ -182,7 +182,7 @@ let rec getTables (table : TomlTable) (name : string) =
     configs @ res
 
 let parse (path : string) =
-     let main = Toml.ReadFile<_> path
+     let main = Toml.ReadFile<TomlProject> path
      let asTable = Toml.ReadFile<TomlTable> path
      let emptyConfig = TomlProject() |> getConfig ""
      let configs = getTables asTable "" |>  List.filter (fun n -> n <> { emptyConfig with Condition = n.Condition}) |> List.toArray
