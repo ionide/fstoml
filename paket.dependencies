@@ -3,21 +3,16 @@ framework: >= net45
 
 nuget FSharp.Core redirects: force
 nuget Nett
-nuget FSharp.Compiler.Service
-nuget FSharp.Compiler.Service.ProjectCracker
 nuget Paket.Core
-nuget Argu
-nuget NUnit
-nuget NUnit.Runners
-nuget FsUnit
 
-
-git https://github.com/fsprojects/Forge.git master build: "build.cmd BuildProjectSystem", OS: Windows
-git https://github.com/fsprojects/Forge.git master build: "build.sh BuildProjectSystem", OS: mono
+git https://github.com/fsharp-editing/Forge.git master build: "build.cmd BuildProjectSystem", OS: Windows
+git https://github.com/fsharp-editing/Forge.git master build: "build.sh BuildProjectSystem", OS: mono
 
 
 group Build
   source https://nuget.org/api/v2
+  framework: >= net45
+
 
   nuget SourceLink.Fake
   nuget FAKE

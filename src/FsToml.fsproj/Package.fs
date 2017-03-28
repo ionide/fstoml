@@ -6,7 +6,6 @@ open FsToml.ProjectSystem
 open FsToml.Target
 open Paket.Domain
 
-
 let rec findDependencyFile folder =
     let deps = "paket.dependencies"
     try
@@ -63,17 +62,17 @@ let getAssemblies (target : Target) (name : string) =
 
                 Paket.FrameworkIdentifier.DotNetStandard version
 
-        let deps = lockFile.GetAllDependenciesOf (GroupName "Main", PackageName name)
+        let deps = lockFile.GetAllDependenciesOf (GroupName "Main", PackageName name, "")
         deps.Add (PackageName name) |> ignore
 
 
         deps
         |> Seq.collect (fun n ->
-            let a = dependenciesFile.GetInstalledPackageModel (Some "Main", n.ToString())            
+            let a = dependenciesFile.GetInstalledPackageModel (Some "Main", n.ToString())
             let dlls =
                 Paket.LoadingScripts.PackageAndAssemblyResolution.getDllsWithinPackage frmwrk a
                 |> List.map (fun f -> f.FullName)
-            let asmbls = Paket.LoadingScripts.PackageAndAssemblyResolution.getFrameworkReferencesWithinPackage a
+            let asmbls = Paket.LoadingScripts.PackageAndAssemblyResolution.getFrameworkReferencesWithinPackage frmwrk a
             List.concat [dlls; asmbls]
         )
         |> Seq.toArray

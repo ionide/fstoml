@@ -69,19 +69,6 @@ type BuildType =
         | Debug     -> Constants.Debug
         | Release  -> Constants.Release
 
-type SemVer =
-    | SemVer of Major:int * Minor:int * Patch:int
-
-    override self.ToString () = self |> function
-        | SemVer (maj, min, p) -> sprintf "%d.%d.%d"  maj min p
-
-
-type FSharpVer =
-    | FSharpVer of Framework:int * Major:int * Minor:int * Patch:int
-
-     override self.ToString () = self |> function
-        | FSharpVer (f,maj, min, p) -> sprintf "%d.%d.%d.%d" f maj min p
-
 [<RequireQualifiedAccess>]
 type FrameworkVersion =
     | V1_0
