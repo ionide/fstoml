@@ -33,7 +33,7 @@ module Commands =
             let proj = Parser.parse path
             let (fproj, refs) = Fsproj.transform proj
 
-            File.WriteAllText (dir </> fn + ".fsproj", fproj.ToXmlString())
+            File.WriteAllText (dir </> fn + ".fsproj", Fsproj.toString "../../.paket/Paket.Restore.targets" fproj )
             File.WriteAllLines (dir </> "paket.references", refs)
         with
         | ex ->
