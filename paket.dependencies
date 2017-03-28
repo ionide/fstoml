@@ -2,11 +2,11 @@ source https://nuget.org/api/v2
 framework: >= net45
 
 nuget FSharp.Core redirects: force
-nuget Nett
+nuget Nett 0.5
 nuget Paket.Core
 
-git https://github.com/fsharp-editing/Forge.git master build: "build.cmd BuildProjectSystem", OS: Windows
-git https://github.com/fsharp-editing/Forge.git master build: "build.sh BuildProjectSystem", OS: mono
+git https://github.com/fsharp-editing/Forge.git 6a9466102b2fbc0ad606617bfa371aec92e595ad build: "build.cmd BuildProjectSystem", OS: Windows
+git https://github.com/fsharp-editing/Forge.git 6a9466102b2fbc0ad606617bfa371aec92e595ad build: "build.sh BuildProjectSystem", OS: mono
 
 
 group Build

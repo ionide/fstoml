@@ -10,5 +10,8 @@ open System.Reflection
 do ()
 
 module internal AssemblyVersionInformation =
-    let [<Literal>] Version = "1.0"
-    let [<Literal>] InformationalVersion = "1.0"
+    let [<Literal>] AssemblyTitle = "FsToml"
+    let [<Literal>] AssemblyProduct = "fstoml"
+    let [<Literal>] AssemblyDescription = "TOML based F# Project System"
+    let [<Literal>] AssemblyVersion = "1.0"
+    let [<Literal>] AssemblyFileVersion = "1.0"

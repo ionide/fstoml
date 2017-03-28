@@ -4,6 +4,9 @@ OutputType      = 'Library'
 FrameworkVersion = '4.6.1'
 
 
+
+
+
 Files = [
     { None = "paket.references" },
     { Compile = "src/file.fs" },
