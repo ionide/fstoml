@@ -4,6 +4,16 @@ NUGET
     Chessie (0.6)
       FSharp.Core
     FSharp.Core (4.0.0.1) - redirects: force
+    Microsoft.Build.Framework (15.1.548)
+      System.Collections (>= 4.0.11) - framework: >= net46
+      System.Diagnostics.Debug (>= 4.0.11) - framework: >= net46
+      System.Globalization (>= 4.0.11) - framework: >= net46
+      System.Runtime (>= 4.1) - framework: >= net46
+      System.Runtime.InteropServices (>= 4.1) - framework: >= net46
+      System.Threading (>= 4.0.11) - framework: >= net46
+      System.Threading.Thread (>= 4.0) - framework: >= net46
+    Microsoft.Build.Utilities.Core (15.1.548)
+      Microsoft.Build.Framework (15.1.548) - framework: >= net46
     Mono.Cecil (0.10.0-beta5)
     Nett (0.5)
     Newtonsoft.Json (10.0.1)
@@ -12,6 +22,14 @@ NUGET
       FSharp.Core
       Mono.Cecil (>= 0.10.0-beta4)
       Newtonsoft.Json
+    System.Collections (4.3) - framework: >= net46
+    System.Diagnostics.Debug (4.3) - framework: >= net46
+    System.Globalization (4.3) - framework: >= net46
+    System.Runtime (4.3)
+    System.Runtime.InteropServices (4.3) - framework: >= net46
+      System.Runtime (>= 4.3) - framework: >= net462
+    System.Threading (4.3) - framework: >= net46
+    System.Threading.Thread (4.3) - framework: >= net46
 GIT
   remote: https://github.com/fsharp-editing/Forge.git
      (4c080a569ef36f4649c18b5b64dbee4c995fc2b7)
