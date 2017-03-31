@@ -11,6 +11,12 @@ type PlatformType =
         | X64     -> Constants.X64
         | AnyCPU  -> Constants.AnyCPU
 
+    static member TryParse = function
+        | Constants.X86 -> Some X86
+        | Constants.X64 -> Some X64
+        | Constants.AnyCPU -> Some AnyCPU
+        | _ -> None
+
 [<RequireQualifiedAccess>]
 type BuildAction =
     | Compile
@@ -69,6 +75,11 @@ type BuildType =
         | Debug     -> Constants.Debug
         | Release  -> Constants.Release
 
+    static member TryParse = function
+        | Constants.Debug -> Some Debug
+        | Constants.Release -> Some Release
+        | _ -> None
+
 [<RequireQualifiedAccess>]
 type FrameworkVersion =
     | V1_0
@@ -98,6 +109,21 @@ type FrameworkVersion =
         | V4_6_1 -> "v4.6.1"
         | V4_6_2 -> "v4.6.2"
 
+    static member TryParse = function
+        | "v1.0" -> Some V1_0
+        | "v1.1" -> Some V1_1
+        | "v1.2" -> Some V1_2
+        | "v1.3" -> Some V1_3
+        | "v1.4" -> Some V1_4
+        | "v1.5" -> Some V1_5
+        | "v1.6" -> Some V1_6
+        | "v4.5" -> Some V4_5
+        | "v4.5.1" -> Some V4_5_1
+        | "v4.6" -> Some V4_6
+        | "v4.6.1" -> Some V4_6_1
+        | "v4.6.2" -> Some V4_6_2
+        | _ -> None
+
 
 [<RequireQualifiedAccess>]
 type FrameworkTarget =
@@ -109,6 +135,12 @@ type FrameworkTarget =
         | Net         -> ".NETFramework"
         | NetStandard -> ".NETStandard"
         | NetcoreApp  -> ".NETCoreApp"
+
+    static member TryParse = function
+        | ".NETFramework" -> Some Net
+        | ".NETStandard" -> Some NetStandard
+        | ".NETCoreApp" -> Some NetcoreApp
+        | _ -> None
 
 type Condition = {
     FrameworkTarget   : FrameworkTarget option
