@@ -106,6 +106,7 @@ let transformBuildConfig(c : Configuration) : ConfigSettings =
         PlatformTarget       = optProperty Constants.PlatformTarget None
         Prefer32Bit          = optProperty Constants.Prefer32Bit c.Prefer32bit
         OtherFlags           = optProperty Constants.OtherFlags (c.OtherFlags |> Option.map List.ofArray)
+        FSharpTargetsPath    = emptyProperty Constants.FSharpTargetsPath
     }
 
 let transformSettings (tomlProj : FsTomlProject ) : ProjectSettings =
