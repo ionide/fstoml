@@ -3,30 +3,28 @@ NUGET
   remote: https://www.nuget.org/api/v2
     Chessie (0.6)
       FSharp.Core
-    FSharp.Core (4.1.2) - redirects: force
-      System.ValueTuple (>= 4.3)
-    Mono.Cecil (0.10.0-beta4)
+    FSharp.Core (4.0.0.1) - redirects: force
+    Mono.Cecil (0.10.0-beta5)
     Nett (0.5)
     Newtonsoft.Json (10.0.1)
-    Paket.Core (4.0.11)
+    Paket.Core (4.1.3)
       Chessie (>= 0.6)
       FSharp.Core
       Mono.Cecil (>= 0.10.0-beta4)
       Newtonsoft.Json
-    System.ValueTuple (4.3) - redirects: force
 GIT
   remote: https://github.com/fsharp-editing/Forge.git
-     (6a9466102b2fbc0ad606617bfa371aec92e595ad)
+     (4c080a569ef36f4649c18b5b64dbee4c995fc2b7)
       build: build.cmd BuildProjectSystem
       os: Windows
-     (6a9466102b2fbc0ad606617bfa371aec92e595ad)
+     (4c080a569ef36f4649c18b5b64dbee4c995fc2b7)
       build: build.sh BuildProjectSystem
       os: mono
 GROUP Build
 FRAMEWORK: >= NET45
 NUGET
   remote: https://www.nuget.org/api/v2
-    FAKE (4.57.2)
+    FAKE (4.57.4)
     FSharp.Compiler.Service (2.0.0.6)
     FSharp.Formatting (2.14.4)
       FSharp.Compiler.Service (2.0.0.6)
@@ -37,5 +35,5 @@ NUGET
     SourceLink.Fake (1.1)
 GITHUB
   remote: fsharp/FAKE
-    modules/Octokit/Octokit.fsx (5d6f1623e4a60a1eb972e0e655e1e57991b26f71)
+    modules/Octokit/Octokit.fsx (8a0082b3cea5849e1ba1fbdb014f4197aa62d09a)
       Octokit (>= 0.20)
