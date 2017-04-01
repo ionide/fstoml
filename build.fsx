@@ -113,7 +113,7 @@ Target "CopyBinaries" (fun _ ->
     ++ "src/FsToml.MsBuild/bin/Release/*.config"
     |> CopyFiles "temp/bin"
 
-    !! "src/FsToml.Sdk/build/*.*"
+    !! "src/FsToml.Sdk/*.*"
     |> CopyFiles "temp/build"
 )
 
