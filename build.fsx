@@ -109,8 +109,12 @@ Target "AssemblyInfo" (fun _ ->
 
 Target "CopyBinaries" (fun _ ->
     !! "src/FsToml.MsBuild/bin/Release/*.dll"
+    ++ "src/FsToml.MsBuild/bin/Release/*.exe"
+    ++ "src/FsToml.MsBuild/bin/Release/*.config"
     |> CopyFiles "temp/bin"
 
+    !! "src/FsToml.Sdk/build/*.*"
+    |> CopyFiles "temp/build"
 )
 
 // --------------------------------------------------------------------------------------

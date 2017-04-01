@@ -8,7 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>5cc73c57-5c4f-4149-99f1-b631d432b931</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFSharpCoreVersion>4.4.0.0</TargetFSharpCoreVersion>
@@ -35,8 +35,8 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml.dll" />
+    <Reference Include="System.Xml.Linq.dll" />
     <Reference Include="Forge.ProjectSystem">
       <HintPath>..\..\paket-files\github.com\fsharp-editing\Forge\temp\bin_projectSystem\Forge.ProjectSystem.dll</HintPath>
     </Reference>
@@ -52,6 +52,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="paket.references" />
+    <Content Include="App.config" />
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="FsToml.MsBuild.fs" />
   </ItemGroup>
