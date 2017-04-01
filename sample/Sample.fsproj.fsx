@@ -9,7 +9,7 @@ System.IO.Directory.SetCurrentDirectory __SOURCE_DIRECTORY__
 open FsToml.Target
 open FsToml.ProjectSystem
 
-let t = FsToml.Parser.parse "testproject.toml"
+let t = FsToml.Parser.parse "sample.toml"
 let target = { Target.BuildType = BuildType.Debug; PlatformType = PlatformType.AnyCPU; FrameworkTarget = FrameworkTarget.Net; FrameworkVersion = FrameworkVersion.V4_6}
 let p = FsToml.Transform.Fsproj.transform target t
 p.ToXmlString()
