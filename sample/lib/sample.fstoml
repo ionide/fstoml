@@ -1,0 +1,16 @@
+﻿Name            = 'Library1'
+OutputType      = 'Library'
+
+Files = [
+    { Compile = "sample.fs" },
+    { Compile = "sample2.fs" },
+]
+
+Dependencies = [
+    { Package = "FSharp.Core" },
+    { Package = "Nett" }
+]
+
+
+
+

@@ -3,10 +3,9 @@
         <GeneratorExePath Condition=" '$(GeneratorExePath)' == '' ">$(MSBuildThisFileDirectory)..\bin\FsToml.MsBuild.exe</GeneratorExePath>
         <GeneratorCommand Condition=" '$(OS)' == 'Windows_NT'">"$(GeneratorExePath)"</GeneratorCommand>
         <GeneratorCommand Condition=" '$(OS)' != 'Windows_NT' ">mono --runtime=v4.0.30319 "$(GeneratorExePath)"</GeneratorCommand>
-        <BuildDependsOn Condition="$(FsTomlGenerator) == 'true'">FsTomlGenerator; $(BuildDependsOn);</BuildDependsOn>
     </PropertyGroup>
 
-    <Target Name="FsTomlGenerator" BeforeTargets="ResolveReferences">
+    <Target Name="FsTomlGenerator" BeforeTargets="Restore">
         <Exec Command="$(GeneratorCommand) $(MSBuildProjectFullPath) $(Configuration) $(Platform) $(TargetFrameworkIdentifier) $(TargetFrameworkVersion)" />
     </Target>
 </Project>
