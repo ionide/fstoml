@@ -40,7 +40,7 @@ let summary = "TOML based F# Project System"
 let description = "TOML based F# Project System"
 
 // List of author names (for NuGet package)
-let authors = [ "Jared Hester"; "Steffen Forkmann"; "Alfonso Garcia-Caro" ]
+let authors = [ "Jared Hester"; "Steffen Forkmann"; "Alfonso Garcia-Caro"; "Krzysztof Cieslak" ]
 
 // Tags for your project (for NuGet package)
 let tags = "F# fsharp toml msbuild project-system"
@@ -53,15 +53,15 @@ let testAssemblies = "tests/**/bin/Release/*Tests*.dll"
 
 // Git configuration (used for publishing documentation in gh-pages branch)
 // The profile where the project is posted
-let gitOwner = "fsprojects"
+let gitOwner = "fsharp-editing"
 let gitHome = "https://github.com/" + gitOwner
 
 // The name of the project on GitHub
 let gitName = "fstoml"
-let cloneUrl = "https://github.com/fsprojects/fstoml"
+let cloneUrl = "https://github.com/fsharp-editing/fstoml"
 
 // The url for the raw files hosted
-let gitRaw = environVarOrDefault "gitRaw" "https://raw.githubusercontent.com/fsprojects/fstoml"
+let gitRaw = environVarOrDefault "gitRaw" "https://raw.githubusercontent.com/fsharp-editing/fstoml"
 
 // --------------------------------------------------------------------------------------
 // END TODO: The rest of the file includes standard build steps
@@ -107,21 +107,17 @@ Target "AssemblyInfo" (fun _ ->
         )
 )
 
-// Copies binaries from default VS location to expected bin folder
-// But keeps a subdirectory structure for each project in the
-// src folder to support multiple project outputs
 Target "CopyBinaries" (fun _ ->
-    !! "src/**/*.??proj"
-    -- "src/**/*.shproj"
-    |>  Seq.map (fun f -> ((System.IO.Path.GetDirectoryName f) </> "bin/Release", "bin" </> (System.IO.Path.GetFileNameWithoutExtension f)))
-    |>  Seq.iter (fun (fromDir, toDir) -> CopyDir toDir fromDir (fun _ -> true))
+    !! "src/FsToml.MsBuild/bin/Release/*.dll"
+    |> CopyFiles "temp/bin"
+
 )
 
 // --------------------------------------------------------------------------------------
 // Clean build results
 
 Target "Clean" (fun _ ->
-    CleanDirs ["bin"; "temp"]
+    CleanDirs ["temp"]
 )
 
 Target "CleanDocs" (fun _ ->
@@ -143,38 +139,6 @@ Target "Build" (fun _ ->
 
 // --------------------------------------------------------------------------------------
 // Run the unit tests using test runner
-
-Target "RunTests" (fun _ ->
-    !! testAssemblies
-    |> NUnit3  (fun p ->
-        { p with
-            ShadowCopy = true
-            TimeOut = TimeSpan.FromMinutes 20.
-            OutputDir  = "TestResults.xml" })
-)
-
-
-Target "RunIntegrationTests" (fun _ ->
-    let cli = "bin/FsToml.CLI/FsToml.CLI.exe"
-
-    !! "tests/FsToml.IntegrationTests/**/project.fstoml"
-    |> Seq.iter (fun p ->
-        printfn "Testing: %s" p
-        let res = execProcess (fun proc ->
-            proc.Arguments <- "compile " + p
-            proc.FileName <- cli) TimeSpan.MaxValue
-        if res then
-            let dir = Path.GetDirectoryName p
-            let exe = dir </> "bin" </> "Test.exe"
-
-            let res = execProcess (fun proc -> proc.FileName <- exe) TimeSpan.MaxValue
-            if res |> not then failwith "Test faield"
-        else
-            failwith "Build Failed"
-
-    )
-)
-
 
 #if MONO
 #else
@@ -401,8 +365,6 @@ Target "All" DoNothing
   ==> "AssemblyInfo"
   ==> "Build"
   ==> "CopyBinaries"
-//   ==> "RunTests"
-//   ==> "RunIntegrationTests"
   ==> "GenerateReferenceDocs"
   ==> "GenerateDocs"
 #if MONO

@@ -1,8 +1,8 @@
 System.IO.Directory.SetCurrentDirectory __SOURCE_DIRECTORY__
-#r "../bin/FsToml.fsproj/Nett.dll"
-#r "../bin/FsToml.fsproj/Forge.ProjectSystem.dll"
-#r "../bin/FsToml.fsproj/FsToml.dll"
-#r "../bin/FsToml.fsproj/FsToml.fsproj.dll"
+#r "../temp/bin/Nett.dll"
+#r "../temp/bin/Forge.ProjectSystem.dll"
+#r "../temp/bin/FsToml.dll"
+#r "../temp/bin/FsToml.fsproj.dll"
 #r "System.Xml"
 #r "System.Xml.Linq"
 
