@@ -1,0 +1,13 @@
+﻿<Project Sdk="FSharp.NET.Sdk;Microsoft.NET.Sdk" ToolsVersion="15.0">
+
+  <PropertyGroup>
+    <TargetFramework>net4.5</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FSharp.NET.Sdk" Version="1.0.0-beta-060000" PrivateAssets="All" />
+    <DotNetCliToolReference Include="dotnet-compile-fsc" Version="1.0.0-preview2-020000" />
+  </ItemGroup>
+  <!-- This will be replaced by SDK reference -->
+  <Import Project="$(MSBuildProjectDirectory)\..\..\temp\build\FsToml.Sdk.targets" />
+</Project>
