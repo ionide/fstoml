@@ -20,8 +20,11 @@ let main argv =
     let p = FsToml.Transform.Fsproj.transform target t
     let ctn = p.ToXmlString()
     let dir = Path.GetDirectoryName proj
-    let pathForProps = Path.Combine(dir, "obj", filename + ".fstoml.targets")
-    File.WriteAllText(pathForProps, ctn)
+    let objDir = Path.Combine(dir, "obj")
+    let pathForProps = Path.Combine(objDir, filename + ".fstoml.props")
+    let ctn' = ctn.Replace("""ToolsVersion="" DefaultTargets="" """, """ToolsVersion="14.0" """)
+    if not (Directory.Exists objDir) then Directory.CreateDirectory objDir |> ignore
+    File.WriteAllText(pathForProps, ctn')
 
 
     0
