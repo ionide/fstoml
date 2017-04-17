@@ -1,8 +1,6 @@
 module FsToml.MsBuild
 
 open System
-open Microsoft.Build.Framework
-open Microsoft.Build.Utilities
 open FsToml.Target
 open FsToml.ProjectSystem
 open System.IO

@@ -11,6 +11,8 @@ open Fake.UserInputHelper
 open Fake.Testing
 open System
 open System.IO
+open Fake.Testing.Expecto
+
 #if MONO
 #else
 #load "packages/build/SourceLink.Fake/tools/Fake.fsx"
@@ -143,6 +145,15 @@ Target "Build" (fun _ ->
 
 // --------------------------------------------------------------------------------------
 // Run the unit tests using test runner
+
+Target "Test" (fun _ ->
+
+    !! "test/**/*.exe"
+    |> Expecto id
+
+)
+
+
 
 #if MONO
 #else
@@ -369,6 +380,7 @@ Target "All" DoNothing
   ==> "AssemblyInfo"
   ==> "Build"
   ==> "CopyBinaries"
+  ==> "Test"
   ==> "GenerateReferenceDocs"
   ==> "GenerateDocs"
 #if MONO
