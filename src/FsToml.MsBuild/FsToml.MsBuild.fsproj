@@ -42,10 +42,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FsToml.fsproj\FsToml.fsproj.fsproj">
-      <Name>FsToml.fsproj.fsproj</Name>
-      <Project>{ca189ae7-1a43-4bae-a9ff-22eaf776f8d6}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\FsToml\FsToml.fsproj">
       <Name>FsToml.fsproj</Name>
       <Project>{8a5d713d-7ada-4c22-ab94-6ba8345a644b}</Project>
