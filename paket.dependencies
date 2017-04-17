@@ -1,19 +1,26 @@
 source https://nuget.org/api/v2
-framework: >= net45
+framework: net46
 
+nuget FAKE
 nuget FSharp.Core 4.0.0.1 redirects: force
 nuget Nett 0.5
 nuget Paket.Core
-nuget Microsoft.Build.Framework
-nuget Microsoft.Build.Utilities.Core
+
 
 git https://github.com/fsharp-editing/Forge.git master build: "build.cmd BuildProjectSystem", OS: Windows
 git https://github.com/fsharp-editing/Forge.git master build: "build.sh BuildProjectSystem", OS: mono
 
+group Test
+  source https://nuget.org/api/v2
+  framework: net46
+
+  nuget FSharp.Core 4.0.0.1 redirects: force
+  nuget Expecto prerelease redirects: force
+  nuget Mono.Cecil prerelease redirects: force
 
 group Build
   source https://nuget.org/api/v2
-  framework: >= net45
+  framework: net46
 
 
   nuget SourceLink.Fake

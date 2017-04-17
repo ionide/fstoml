@@ -6,4 +6,4 @@ before_install:
   - chmod +x build.sh
 
 script:
-  - ./build.sh RunIntegrationTests
+  - ./build.sh Test
