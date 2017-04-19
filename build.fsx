@@ -135,6 +135,7 @@ Target "CleanDocs" (fun _ ->
 
 Target "Build" (fun _ ->
     !! "src/**/*.??proj"
+
 #if MONO
     |> MSBuildReleaseExt "" [ ("DefineConstants","MONO") ] "Rebuild"
 #else
@@ -147,6 +148,9 @@ Target "Build" (fun _ ->
 // Run the unit tests using test runner
 
 Target "Test" (fun _ ->
+    !! "test/**/*.??proj"
+    |> MSBuildDebug "" "Rebuild"
+    |> ignore
 
     !! "test/**/*.exe"
     |> Expecto id
