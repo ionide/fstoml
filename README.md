@@ -4,16 +4,12 @@ FsToml is new, lighweight project file for F#.
 
 **Warning! FsToml is experimental project, not recommended to use in production environment**
 
-
 ## Example
 
 ```toml
-FsTomlVersion   = '0.0.1'
 Name            = 'FantasticApp'
-Guid            = 'bb0c6f01-5e57-4575-a498-5de850d9fa6c'
 OutputType      = 'Exe'
-FSharpCore      = '4.4.0.0'
-
+FrameworkVersion = '4.5'
 
 Files = [
     { Compile = "src/file.fs" },
@@ -23,10 +19,10 @@ Files = [
 ]
 
 References = [
-    { Framework = "System" },
-    { Framework = "FSharp.Core" },
+    { Reference = "System" },
+    { Reference = "FSharp.Core" },
     { Project   = "Deppy.fstoml" },
-    { Library   = "lib/Fable.Core.dll", Private = true },
+    { Reference   = "lib/Fable.Core.dll", Private = true },
     { Package   = "Nett" }
 ]
 
@@ -51,32 +47,18 @@ OtherFlags = [ '--warnon:1182' ]
     OutputPath = "bin/Release/x64"
 ```
 
-## Aim of the project
+### Why?
 
-We want:
+* Sane syntax
+* Removing all moving parts of normal MsBuild files that makes it imposible to parse without using MsBuild (conditional statements, variable assigments, functions calls inside of project file)
+* Declarative way of defining conditional parts of project
+* Deeper integration with Paket
+* Better set of CLI tooling for project managment [which will make editor integration much easier]
 
-* Have lightweight, human readable, easy to parse project file for F#
-* Use fully declarative style - no custom programming language inside of project file
-* Support popular types of F# applications
-* Provide easy migration path to `fsproj` in case user needs more advanced features
-* Provide integrated Paket support
-* Support .Net 4.5+, .Net Standard, .Net Core
 
-We won't :
+## How does it work
 
-* Support all MsBuild features - no targets, no custom extensions etc.
-* Provide support for application types requireing more advanced MsBuild features (like Xamarin, Azure Service Fabric etc)
-* Support every possible framework target - only .Net 4.5+, .Net Standard and .Net Core
-
-## What's working
-
-* Project file parser based on [0.0.1 specification](spec/sprc-0.0.1.toml)
-* Support for .Net 4.5+ (.Net Standard and .Net Core are still **not** supported)
-* Internal project model
-* Mapping internal project model to FSharpProjectOptions, what allows integretation with FCS based tooling.
-* Generating equivalent `fsproj` file
-* Compiling `fstoml` project without using MsBuild
-* CLI for compiling and generating `fsproj`
+`fstoml` is abstraction layer on top of MsBuild providing more declarative, high level way of defining projects. Under the hood it's translated to normal MsBuild XML `.props` file and imported by MsBuild whenever it's called. That makes `fstoml` 100% compatiable with all existing tooling, such as `dotnet` CLI and different editors.
 
 
 ## Contributing and copyright
