@@ -1,7 +1,6 @@
 source https://nuget.org/api/v2
 framework: net46
 
-nuget FAKE
 nuget FSharp.Core 4.0.0.1 redirects: force
 nuget Nett 0.5
 nuget Paket.Core
@@ -15,8 +14,7 @@ group Test
   framework: net46
 
   nuget FSharp.Core 4.0.0.1 redirects: force
-  nuget Expecto prerelease redirects: force
-  nuget Mono.Cecil prerelease redirects: force
+  nuget Expecto
 
 group Build
   source https://nuget.org/api/v2

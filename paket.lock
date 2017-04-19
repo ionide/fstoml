@@ -3,7 +3,6 @@ NUGET
   remote: https://www.nuget.org/api/v2
     Chessie (0.6)
       FSharp.Core
-    FAKE (4.58.6)
     FSharp.Core (4.0.0.1) - redirects: force
     Mono.Cecil (0.10.0-beta5)
     Nett (0.5)
@@ -42,10 +41,10 @@ GROUP Test
 FRAMEWORK: NET46
 NUGET
   remote: https://www.nuget.org/api/v2
-    Argu (3.7) - redirects: force
-    Expecto (5.0.0-beta1) - redirects: force
+    Argu (3.7)
+    Expecto (4.1.1)
       Argu (>= 3.7)
       FSharp.Core (>= 3.1.2.5)
-      Mono.Cecil (>= 0.10.0-beta5)
+      Mono.Cecil (>= 0.9.6.4)
     FSharp.Core (4.0.0.1) - redirects: force
-    Mono.Cecil (0.10.0-beta5) - redirects: force
+    Mono.Cecil (0.9.6.4)
