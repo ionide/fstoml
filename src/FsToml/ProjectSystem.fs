@@ -188,6 +188,8 @@ type ProjectReference = {
     CopyLocal : bool option
 }
 
+type CustomConfig = Config of key : string * value : string
+
 type FsTomlProject = {
     Name              : string
     AssemblyName      : string option
@@ -199,4 +201,5 @@ type FsTomlProject = {
     Files             : SourceFile []
     References        : Reference []
     ProjectReferences : ProjectReference []
+    CustomConfigs     : (string * CustomConfig[]) []
 }

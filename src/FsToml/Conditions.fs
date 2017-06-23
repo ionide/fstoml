@@ -77,3 +77,11 @@ let parseTomlCondition (condition : string) : Condition =
     |> Array.choose id
     |> Array.fold apply empty
 
+let canParseTomlCondition (condition : string) =
+    let results =
+        if condition.Contains "." |> not then
+            parsePart condition |> Array.singleton
+        else
+            condition.Split '.' |> Array.map parsePart
+    results |> Array.exists (Option.isSome)
+

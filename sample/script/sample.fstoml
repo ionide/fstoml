@@ -1,4 +1,4 @@
-﻿Name            = 'Library1'
+Name            = 'Library1'
 OutputType      = 'Library'
 
 Files = [
@@ -10,3 +10,11 @@ Dependencies = [
     { Package = "FSharp.Core" },
     { Package = "Nett" }
 ]
+
+[ Fable ]
+test = 'abc'
+test2 = 'cde'
+
+[ SomethingElse ]
+test = 'abc'
+test2 = 'cde'

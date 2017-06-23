@@ -25,8 +25,6 @@ type Dependency () =
     member val Private         : Nullable<bool> = Nullable() with get,set
     member val SpecificVersion : Nullable<bool> = Nullable() with get,set
 
-
-
 type TomlProject () =
     member val Name              : string               = "" with get, set
     member val Guid              : Nullable<Guid>       = Nullable() with get, set
@@ -161,9 +159,18 @@ let toProjectSystem (proj : TomlProject) : FsTomlProject =
         ProjectReferences = projRefs
         References = refs
         Files = files
+        CustomConfigs = [||]
     }
 
-let rec getTables (table : TomlTable) (name : string) =
+let getCustomConfigs (name : string) (table : TomlTable) =
+    name, table.Rows
+    |> Seq.map (fun kv ->
+        let k = kv.Key
+        let v = kv.Value.Get<string>()
+        Config(k,v))
+    |> Seq.toList
+
+let rec getTables (table : TomlTable) (name : string) : (Configuration list * (string * CustomConfig list) list) =
     let names =
         table.Rows
         |> Seq.filter (fun kv -> kv.Value.ReadableTypeName = "table" )
@@ -174,17 +181,33 @@ let rec getTables (table : TomlTable) (name : string) =
         names
         |> Seq.map (fun (m,n) -> getTables (table.Get<TomlTable>(m)) n  )
         |> Seq.toList
-        |> List.collect id
+
+    let resC = res |> List.collect fst
+
+    let resT = res |> List.collect snd
+
+    let configNames, otherNames =
+        names |> List.partition (fun (_,n) -> Conditions.canParseTomlCondition n)
 
     let configs =
-        names |> List.map (fun (m,n) -> table.Get<TomlProject>(m) |> getConfig n)
+        configNames
+        |> List.map (fun (m,n) -> table.Get<TomlProject>(m) |> getConfig n)
 
-    configs @ res
+    let customConfigs =
+        otherNames
+        |> List.map (fun (m,n) -> table.Get<TomlTable>(m) |> getCustomConfigs n )
+
+    configs @ resC, customConfigs @ resT
+
+
+
 
 let parse (path : string) =
-     let main = Toml.ReadFile<TomlProject> path
-     let asTable = Toml.ReadFile<TomlTable> path
-     let emptyConfig = TomlProject() |> getConfig ""
-     let configs = getTables asTable "" |>  List.filter (fun n -> n <> { emptyConfig with Condition = n.Condition}) |> List.toArray
-     let res = main |> toProjectSystem
-     {res with Configurations = Array.append res.Configurations configs}
+    let main = Toml.ReadFile<TomlProject> path
+    let fullFileTable = Toml.ReadFile<TomlTable> path
+    let emptyConfig = TomlProject() |> getConfig ""
+    let cfg, tables = getTables fullFileTable ""
+    let configs = cfg |>  List.filter (fun n -> n <> { emptyConfig with Condition = n.Condition}) |> List.toArray
+    let customCfgs = tables |> List.map (fun (name, t) -> name, t |> List.toArray ) |> List.toArray
+    let res = main |> toProjectSystem
+    {res with Configurations = Array.append res.Configurations configs; CustomConfigs = customCfgs}
