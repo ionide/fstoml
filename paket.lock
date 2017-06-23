@@ -1,4 +1,4 @@
-FRAMEWORK: NET46
+RESTRICTION: == net46
 NUGET
   remote: https://www.nuget.org/api/v2
     Chessie (0.6)
@@ -21,7 +21,7 @@ GIT
       build: build.sh BuildProjectSystem
       os: mono
 GROUP Build
-FRAMEWORK: NET46
+RESTRICTION: == net46
 NUGET
   remote: https://www.nuget.org/api/v2
     FAKE (4.58.6)
@@ -38,7 +38,7 @@ GITHUB
     modules/Octokit/Octokit.fsx (dad2dec00064233e9742b458d96fe64708f3be8a)
       Octokit (>= 0.20)
 GROUP Test
-FRAMEWORK: NET46
+RESTRICTION: == net46
 NUGET
   remote: https://www.nuget.org/api/v2
     Argu (3.7)
